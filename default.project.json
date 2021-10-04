@@ -7,12 +7,10 @@
 		"**/ThirdPartyNoticeText.txt"
 	],
 	"tree": {
+		"$className": "DataModel",
 		"ServerScriptService": {
 			"$className": "ServerScriptService",
-			"poly": {
-				"$className": "Folder",
-				"$path": "out"
-			}
+			"poly": { "$path": "out" }
 		}
 	}
 }
