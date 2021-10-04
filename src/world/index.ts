@@ -1,6 +1,6 @@
 import { t } from "@rbxts/t";
 import { ComponentDefinition, ComponentEvent } from "Component";
-import { symbol } from "index";
+import symbol from "../util/symbol";
 import { System, UpdateSystem } from "System";
 import addToConnections from "world/addToConnections";
 import fireEvent from "./fireEvent";
