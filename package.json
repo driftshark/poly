@@ -4,8 +4,9 @@
 	"description": "",
 	"main": "out/init.lua",
 	"scripts": {
-		"prepare": "npm run build",
-		"build": "npx rbxtsc --verbose"
+		"prepare": "npx rbxtsc --verbose -p tsconfig.prod.json",
+		"build": "npx rbxtsc --verbose",
+		"test": "npm run build && rojo build -o place.rbxlx && run-in-roblox.exe --place place.rbxlx --script out/tests/init.server.lua"
 	},
 	"keywords": [],
 	"author": "suyoin",
@@ -20,6 +21,7 @@
 	"devDependencies": {
 		"@rbxts/compiler-types": "^1.2.3-types.0",
 		"@rbxts/t": "^2.1.5",
+		"@rbxts/testez": "^0.3.1-ts.6",
 		"@rbxts/types": "^1.0.531",
 		"@typescript-eslint/eslint-plugin": "^4.31.2",
 		"@typescript-eslint/parser": "^4.31.2",
@@ -28,7 +30,7 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-roblox-ts": "^0.0.31",
 		"prettier": "^2.4.1",
-		"roblox-ts": "^1.2.3",
+		"roblox-ts": "^1.2.3-dev-17bfbf8",
 		"typescript": "^4.4.3"
 	}
 }
