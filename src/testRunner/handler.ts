@@ -1,6 +1,13 @@
-//require(game:GetService("ServerScriptService").poly.tests.handler)()
+//require(game:GetService("ReplicatedStorage").rbxts_include.RuntimeLib).import("cmd_line", game:GetService("ReplicatedStorage").poly.testRunner.handler)()
 
 import { TestBootstrap } from "@rbxts/testez";
+
+const RuntimeLib = require(game
+	.GetService("ReplicatedStorage")
+	.WaitForChild("rbxts_include")
+	.WaitForChild("RuntimeLib") as ModuleScript) as {
+	import: (caller: LuaSourceContainer, module: Instance) => {};
+};
 
 export = async () => {
 	let tests: ModuleScript[] = [];
@@ -12,6 +19,8 @@ export = async () => {
 			if (file.Name.sub(-5) === ".spec" && file.IsA("ModuleScript")) {
 				const newFile = file.Clone();
 				newFile.Parent = file.Parent;
+
+				RuntimeLib.import(script, newFile);
 
 				tests.push(newFile);
 			}
