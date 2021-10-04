@@ -215,7 +215,7 @@ export class World {
 
 		//manually checking each component is necessary because you can subscribe to a ref's events even if the component is not on the ref
 		for (const [i, v] of pairs(this.events)) {
-			if (v[ref] !== undefined) {
+			if (v[<any>ref] !== undefined) {
 				//@ts-ignore
 				v[ref] = undefined;
 
