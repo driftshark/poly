@@ -212,6 +212,18 @@ export class World {
 		for (const [i] of refComponents) {
 			this.removeComponent(ref, i);
 		}
+
+		//manually checking each component is necessary because you can subscribe to a ref's events even if the component is not on the ref
+		for (const [i, v] of pairs(this.events)) {
+			if (v[ref] !== undefined) {
+				//@ts-ignore
+				v[ref] = undefined;
+
+				if (next(v)[0] === undefined) {
+					this.events[i] = undefined;
+				}
+			}
+		}
 	}
 
 	/** The given callback is called whenever a ComponentEvent is fired for any of the Components */
