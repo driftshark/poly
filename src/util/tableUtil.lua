@@ -85,6 +85,10 @@ local function diff(a, b)
 	local diffed = {}
 
 	for k, v in pairs(b) do
+		if a[k] == v then
+			continue
+		end
+
 		if typeof(v) ~= typeof(a[k]) or typeof(v) ~= "table" then
 			diffed[k] = v
 		else
