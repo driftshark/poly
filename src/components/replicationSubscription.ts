@@ -1,10 +1,9 @@
 import { t } from "@rbxts/t";
-import { MappedComponentData } from "componentUtils/mapped";
 import { defineComponent } from "../../src";
 
 const definition = defineComponent({
 	name: "ReplicationSubscription",
-	data: <MappedComponentData<boolean, string>>(<unknown>true),
+	data: <Map<string, boolean>>(<unknown>true),
 
 	refValidator: t.instanceIsA("Player"),
 });

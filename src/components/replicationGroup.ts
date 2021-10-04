@@ -1,10 +1,9 @@
 import { t } from "@rbxts/t";
-import { MappedComponentData } from "componentUtils/mapped";
 import { defineComponent } from "../../src";
 
 const definition = defineComponent({
 	name: "ReplicationGroup",
-	data: <MappedComponentData<string, string | symbol>>(<unknown>true),
+	data: <Map<string | symbol, string>>(<unknown>true),
 	refValidator: t.any,
 });
 
