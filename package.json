@@ -5,6 +5,7 @@
 	"main": "out/init.lua",
 	"scripts": {
 		"prepare": "npx rbxtsc --verbose -p tsconfig.prod.json",
+		"dev": "concurrently \"rojo serve\" \"npx rbxtsc -w\"",
 		"build": "npx rbxtsc --verbose",
 		"test": "npm run build && rojo build -o place.rbxlx && run-in-roblox.exe --place place.rbxlx --script out/tests/init.server.lua"
 	},
@@ -25,6 +26,7 @@
 		"@rbxts/types": "^1.0.531",
 		"@typescript-eslint/eslint-plugin": "^4.31.2",
 		"@typescript-eslint/parser": "^4.31.2",
+		"concurrently": "^6.3.0",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "^4.0.0",
