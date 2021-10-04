@@ -109,12 +109,13 @@ local function patch(a, diff)
 	local new = shallow(a)
 
 	for k, v in pairs(diff) do
+		if v == SerializedNone then
+			new[k] = nil
+			continue
+		end
+
 		if typeof(v) ~= typeof(new[k]) or typeof(v) ~= "table" then
-			if v == SerializedNone then
-				new[k] = nil
-			else
-				new[k] = v
-			end
+			new[k] = v
 		else
 			--both are tables
 			new[k] = patch(new[k], v)
