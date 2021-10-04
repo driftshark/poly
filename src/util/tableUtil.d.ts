@@ -9,10 +9,10 @@ export function shallow<T extends object>(tbl: T): DeepWritable<T>;
 export function deepEquals(a: unknown, b: unknown): boolean;
 
 /** Diffs two tables */
-export function diff(
+export function diff<TB extends object | Map<unknown, unknown>>(
 	a: object | Map<unknown, unknown>,
-	b: object | Map<unknown, unknown>
-): unknown;
+	b: TB
+): TB;
 
 export function patch<TA extends object | Map<unknown, unknown>>(
 	a: TA,
