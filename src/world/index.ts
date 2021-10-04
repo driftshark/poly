@@ -105,7 +105,7 @@ export class World {
 		const old = this.componentToRefs[componentName][ref]; //@ts-ignore
 		this.componentToRefs[componentName][ref] = data;
 
-		if ((old as string) !== undefined) {
+		if (<string>old !== undefined) {
 			this.fireEvent(
 				componentName,
 				"Updated",
@@ -155,7 +155,7 @@ export class World {
 			const old = this.componentToRefs[componentName][
 				ref
 			] as Components[TComponentName]["data"];
-			if (old !== undefined) {
+			if (<string>old !== undefined) {
 				this.fireEvent(
 					componentName,
 					"Removing",
