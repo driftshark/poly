@@ -19,7 +19,6 @@ export = () => {
 	});
 
 	it("should get components of ref", () => {
-		print(world.componentsOf(TEST_REF));
 		expect(
 			deepEquals(world.componentsOf(TEST_REF), {
 				ReplicationGroup: true,
