@@ -5,7 +5,7 @@ export = createSystem(() => {
 	return game.GetService("RunService").IsStudio()
 		? {
 				name: "hot",
-				init: (world) => {
+				onRegistered: (world) => {
 					task.defer(() => {
 						for (const [trackedSystemInstance, system] of world["systems"]) {
 							if (!typeIs(trackedSystemInstance, "Instance")) {
@@ -36,19 +36,21 @@ export = createSystem(() => {
 										world["updateSystems"].remove(index);
 									}
 
-									world.registerSystems([
-										(
-											require(trackedSystemInstance.Clone()) as ReturnType<
-												typeof import("../createSystem").default
-											>
-										)(),
-									]);
+									world.registerSystems(
+										[
+											(
+												require(trackedSystemInstance.Clone()) as ReturnType<
+													typeof import("../createSystem").default
+												>
+											)(),
+										],
+										true
+									);
 								}
 							});
 						}
 					});
 				},
-				destroy: () => {},
 		  }
 		: { name: "hot" };
 });
