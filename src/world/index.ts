@@ -291,7 +291,11 @@ export class World {
 			if (typeIs(v, "Instance") ? v.IsA("ModuleScript") : typeIs(v, "table")) {
 				let system: System;
 				if (typeIs(v, "Instance")) {
-					system = require(v as ModuleScript) as System;
+					system = (
+						require(v as ModuleScript) as ReturnType<
+							typeof import("../createSystem").default
+						>
+					)();
 
 					if (RunService.IsStudio()) {
 						this.systemInstances.push(v as ModuleScript);
