@@ -1,15 +1,15 @@
 import createSystem from "createSystem";
 
-//listens to CollectionService events for Instances with the Component tag for cleanup
+//listens to CollectionService events for Instances with the polyEntity tag for cleanup
 
 export = createSystem(() => {
 	let cn: RBXScriptConnection | undefined;
 	return {
-		name: "component",
+		name: "EntityWatcher",
 		onRegistered: (world) => {
 			cn = game
 				.GetService("CollectionService")
-				.GetInstanceRemovedSignal("Component")
+				.GetInstanceRemovedSignal("polyEntity")
 				.Connect((instance) => {
 					world.removeRef(instance);
 				});
