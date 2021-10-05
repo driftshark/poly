@@ -39,9 +39,11 @@ export = () => {
 		disconnects.push(
 			world.onComponentEvent("ReplicationSubscription", "Created", fn, "uuid")
 		);
-		disconnects.push(world.onRef("LayeredPlaceholder", TEST_REF, fn, "uuid"));
+		//@ts-ignore
+		disconnects.push(world.onRef("PlaceholderComponent", TEST_REF, fn, "uuid"));
 		disconnects.push(
-			world.onComponentEvent("LayeredPlaceholder", "Created", fn, "uuid")
+			//@ts-ignore
+			world.onComponentEvent("PlaceholderComponent", "Created", fn, "uuid")
 		);
 
 		expect(
@@ -77,7 +79,7 @@ export = () => {
 				Old: {
 					[TEST_REF]: { uuid: fn },
 				},
-				LayeredPlaceholder: {
+				PlaceholderComponent: {
 					[TEST_REF]: { uuid: fn },
 					Created: { uuid: fn },
 				},
@@ -109,7 +111,7 @@ export = () => {
 				ReplicationSubscription: {
 					Created: { uuid: fn },
 				},
-				LayeredPlaceholder: { Created: { uuid: fn } },
+				PlaceholderComponent: { Created: { uuid: fn } },
 			})
 		).to.equal(true);
 
@@ -127,7 +129,7 @@ export = () => {
 				ReplicationSubscription: {
 					Created: { uuid: fn },
 				},
-				LayeredPlaceholder: { Created: { uuid: fn } },
+				PlaceholderComponent: { Created: { uuid: fn } },
 			})
 		).to.equal(true);
 
