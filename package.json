@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "out/init.lua",
 	"scripts": {
-		"prepare": "npx rbxtsc --verbose -p tsconfig.prod.json",
+		"prepare": "npm run build",
 		"dev": "concurrently \"rojo serve\" \"npx rbxtsc -w\"",
 		"build": "npx rbxtsc --verbose",
 		"test": "npm run build && rojo build -o place.rbxlx && run-in-roblox.exe --place place.rbxlx --script out/testRunner/init.server.lua"
