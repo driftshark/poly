@@ -1,4 +1,5 @@
 import { t } from "@rbxts/t";
+import { named } from "util/symbol";
 import { merge } from "util/tableUtil";
 import { World } from "world";
 
@@ -23,38 +24,38 @@ export const addLayeredComponent = <
 	TComponentName extends keyof ExtractMembers<
 		Components,
 		{ data: LayeredComponentData<unknown> }
-	>
+	>,
+	TData extends Components[TComponentName] extends defined
+		? Components[TComponentName]["data"]
+		: LayeredComponentData<unknown, unknown>
 >(
 	world: World,
 	ref: TRef,
 	componentName: TComponentName,
 	layerName: string,
-	value: Components[TComponentName]["data"] extends LayeredComponentData<
-		infer T,
-		infer LayerT
-	>
+	value: TData extends LayeredComponentData<infer T, infer LayerT>
 		? LayerT extends defined
 			? LayerT
 			: T
 		: never,
-	reducer: (
-		layers: DeepReadonly<Components[TComponentName]["data"]>["layers"]
-	) => Components[TComponentName]["data"]["reduced"]
+	reducer: (layers: DeepReadonly<TData["layers"]>) => TData["reduced"]
 ) => {
 	let existingComponent = world.getComponent(ref, componentName) as
-		| DeepReadonly<Components[TComponentName]["data"]>
+		| TData
 		| undefined;
 
 	const layers = merge(
-		existingComponent
-			? existingComponent.layers
-			: (new Map() as Components[TComponentName]["data"]["layers"]),
-		new Map([[layerName, value]])
+		existingComponent ? existingComponent.layers : new Map(),
+		new Map([[layerName, value ?? named("None")]])
 	);
-	const reduced = reducer(layers);
+	const reduced = reducer(layers as DeepReadonly<TData["layers"]>);
 
 	const data = { reduced, layers };
-	world.addComponent(ref, componentName, data);
+	world.addComponent(
+		ref,
+		componentName,
+		data as Components[TComponentName]["data"]
+	);
 	return data;
 };
 

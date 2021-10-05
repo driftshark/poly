@@ -1,4 +1,5 @@
 import { t } from "@rbxts/t";
+import { named } from "util/symbol";
 import { merge } from "util/tableUtil";
 import { World } from "world";
 
@@ -24,7 +25,7 @@ export const addMappedComponent = <
 	ref: TRef,
 	componentName: TComponentName,
 	key: TKey,
-	value: Components[TComponentName]["data"][TKey]
+	value: Components[TComponentName]["data"][TKey] | undefined
 ) => {
 	let existingComponent = world.getComponent(ref, componentName);
 	if (existingComponent === undefined) {
@@ -32,7 +33,7 @@ export const addMappedComponent = <
 	}
 
 	const data = merge(existingComponent!, {
-		[key]: value,
+		[key]: value ?? named("None"),
 	});
 
 	world.addComponent(ref, componentName, data);
