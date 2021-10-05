@@ -284,7 +284,7 @@ export class World {
 		this.componentDefinitions[componentDefinition.name] = componentDefinition;
 	}
 
-	public registerSystems(inSystems: (Instance | System)[]): void {
+	public registerSystems(inSystems: (Instance | System)[], isHot?: true): void {
 		for (const v of inSystems) {
 			if (typeIs(v, "Instance") ? v.IsA("ModuleScript") : typeIs(v, "table")) {
 				let system: System;
@@ -302,7 +302,9 @@ export class World {
 					system
 				);
 
-				if (system.onRegistered) system.onRegistered(this);
+				if (!isHot) {
+					if (system.onRegistered) system.onRegistered(this);
+				}
 				if (system.init) system.init(this);
 				if (system.update) this.updateSystems.push(system as UpdateSystem);
 			}
