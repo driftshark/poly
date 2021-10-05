@@ -2,6 +2,7 @@
 
 import { ComponentEvent } from "Component";
 import { World } from "index";
+import { named } from "util/symbol";
 import { deepEquals } from "util/tableUtil";
 
 export = () => {
@@ -285,5 +286,77 @@ export = () => {
 		expect(deepEquals(world["refToComponents"], {})).to.equal(true);
 		expect(deepEquals(world["events"], {})).to.equal(true);
 		expect(count).to.equal(1);
+	});
+
+	it("should remove ref connections with other connections present", () => {
+		let count = 0;
+		const fn = (
+			componentEvent: ComponentEvent<Components["ReplicationGroup"]>,
+			data: object
+		) => {
+			count += 1;
+			expect(componentEvent).to.equal("Removing");
+			expect(deepEquals(data, { us: "among" })).to.equal(true);
+		};
+
+		const fn2 = (
+			componentEvent: ComponentEvent<Components["ReplicationGroup"]>,
+			ref: any,
+			...args: object[]
+		) => {
+			count += 1;
+			expect(componentEvent).to.equal("Removing");
+			expect(ref).to.equal(TEST_REF_2);
+			expect(deepEquals(args[0], { us: "among" })).to.equal(true);
+		};
+
+		world.addComponent(
+			TEST_REF_2,
+			"ReplicationGroup",
+			new Map([["us", "among"]])
+		);
+
+		world.onRef("ReplicationGroup", TEST_REF_2, fn as any, "uuid");
+		const disconnectBase = world.onComponent(
+			"ReplicationGroup",
+			fn2 as any,
+			"uuid"
+		);
+
+		expect(
+			deepEquals(world["componentToRefs"], {
+				ReplicationGroup: {
+					[TEST_REF_2]: { us: "among" },
+				},
+			})
+		).to.equal(true);
+		expect(
+			deepEquals(world["refToComponents"], {
+				[TEST_REF_2]: {
+					ReplicationGroup: true,
+				},
+			})
+		).to.equal(true);
+		expect(
+			deepEquals(world["events"], {
+				ReplicationGroup: new Map<string | symbol, { uuid: typeof fn }>([
+					[TEST_REF_2, { uuid: fn }],
+					[named("base"), { uuid: fn2 }],
+				]),
+			})
+		).to.equal(true);
+
+		world.removeComponent(TEST_REF_2, "ReplicationGroup");
+
+		expect(deepEquals(world["componentToRefs"], {})).to.equal(true);
+		expect(deepEquals(world["refToComponents"], {})).to.equal(true);
+		expect(
+			deepEquals(world["events"], {
+				ReplicationGroup: new Map([[named("base"), { uuid: fn2 }]]),
+			})
+		).to.equal(true);
+		expect(count).to.equal(2);
+
+		disconnectBase();
 	});
 };
