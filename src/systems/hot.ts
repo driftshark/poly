@@ -4,7 +4,7 @@ import { UpdateSystem } from "System";
 export = createSystem(() => {
 	return game.GetService("RunService").IsStudio()
 		? {
-				name: "hot",
+				name: "Hot",
 				onRegistered: (world) => {
 					task.defer(() => {
 						for (const [trackedSystemInstance, system] of world["systems"]) {
@@ -52,5 +52,5 @@ export = createSystem(() => {
 					});
 				},
 		  }
-		: { name: "hot" };
+		: { name: "Hot" };
 });
