@@ -6,7 +6,7 @@ import { ReplicationType } from "replication";
  *
  * Note that using `ReplicationType.Attribute` for multiple values with the same key has undefined behavior.
  */
-export default <
+export default function <
 	TDefinition extends ComponentDefinition,
 	TReplicationType extends t.static<
 		TDefinition["refValidator"]
@@ -26,11 +26,8 @@ export default <
 					  }
 			: Exclude<TReplicationType, ReplicationType.Diff>;
 	}
->(
-	definition: TDefinition,
-	replicate: TReturnType["replicate"]
-): TReturnType => {
+>(definition: TDefinition, replicate: TReturnType["replicate"]): TReturnType {
 	(definition as TReturnType).replicate = replicate;
 
 	return definition as TReturnType;
-};
+}
