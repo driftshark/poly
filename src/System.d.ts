@@ -1,6 +1,7 @@
 import { World } from "world";
 
 export interface System {
+	name: string;
 	/** Priorities are ordered in descending fashion */
 	priority?: number;
 

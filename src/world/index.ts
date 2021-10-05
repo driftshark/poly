@@ -44,9 +44,7 @@ export class World {
 	private componentDefinitions: {
 		[key in keyof Components]: Components[key];
 	};
-
-	private systemInstances: ModuleScript[] = [];
-	private systems: System[] = [];
+	private systems: Map<ModuleScript | string, System> = new Map();
 	private updateSystems: UpdateSystem[] = [];
 
 	private refToComponents: Map<Ref, Map<keyof Components, true>> = new Map();
@@ -296,14 +294,13 @@ export class World {
 							typeof import("../createSystem").default
 						>
 					)();
-
-					if (RunService.IsStudio()) {
-						this.systemInstances.push(v as ModuleScript);
-					}
 				} else {
 					system = v;
 				}
-				this.systems.push(system);
+				this.systems.set(
+					typeIs(v, "Instance") ? (v as ModuleScript) : v.name,
+					system
+				);
 
 				if (system.onRegistered) system.onRegistered(this);
 				if (system.init) system.init(this);
