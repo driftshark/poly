@@ -26,7 +26,7 @@ export const defaultMod = <
 	definition: TDefinition,
 	defaults: TReturnType["defaults"]
 ): TReturnType => {
-	(<TReturnType>definition).defaults = defaults;
+	(definition as TReturnType).defaults = defaults;
 
-	return <TReturnType>definition;
+	return definition as TReturnType;
 };

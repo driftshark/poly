@@ -105,12 +105,12 @@ export class World {
 		const old = this.componentToRefs[componentName][ref]; //@ts-ignore
 		this.componentToRefs[componentName][ref] = data;
 
-		if (<string>old !== undefined) {
+		if ((old as string) !== undefined) {
 			this.fireEvent(
 				componentName,
 				"Updated",
 				ref,
-				<DeepReadonly<typeof data>>data,
+				data as DeepReadonly<typeof data>,
 				old
 			);
 		} else {
@@ -118,7 +118,7 @@ export class World {
 				componentName,
 				"Created",
 				ref,
-				<DeepReadonly<typeof data>>data
+				data as DeepReadonly<typeof data>
 			);
 		}
 
@@ -152,15 +152,15 @@ export class World {
 
 		if (this.componentToRefs[componentName] !== undefined) {
 			//@ts-ignore
-			const old = this.componentToRefs[componentName][
-				ref
-			] as Components[TComponentName]["data"];
-			if (<string>old !== undefined) {
+			const old = this.componentToRefs[componentName][ref] as
+				| Components[TComponentName]["data"]
+				| undefined;
+			if ((old as string) !== undefined) {
 				this.fireEvent(
 					componentName,
 					"Removing",
 					ref,
-					<DeepReadonly<typeof old>>old
+					old as DeepReadonly<NonNullable<typeof old>>
 				);
 			}
 
@@ -215,7 +215,7 @@ export class World {
 
 		//manually checking each component is necessary because you can subscribe to a ref's events even if the component is not on the ref
 		for (const [i, v] of pairs(this.events)) {
-			if (v[<any>ref] !== undefined) {
+			if (v[ref as any] !== undefined) {
 				//@ts-ignore
 				v[ref] = undefined;
 
@@ -303,7 +303,7 @@ export class World {
 
 				if (system.onRegistered) system.onRegistered(this);
 				if (system.init) system.init(this);
-				if (system.update) this.updateSystems.push(<UpdateSystem>system);
+				if (system.update) this.updateSystems.push(system as UpdateSystem);
 			}
 		}
 

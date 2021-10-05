@@ -30,7 +30,7 @@ export default <
 	definition: TDefinition,
 	replicate: TReturnType["replicate"]
 ): TReturnType => {
-	(<TReturnType>definition).replicate = replicate;
+	(definition as TReturnType).replicate = replicate;
 
-	return <TReturnType>definition;
+	return definition as TReturnType;
 };
