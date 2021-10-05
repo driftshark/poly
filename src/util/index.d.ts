@@ -18,17 +18,5 @@ type DeepWritable<T> = T extends ReadonlyMap<infer K, infer V>
 	  }
 	: T;
 
-type KeyOf<T> = T extends object
-	? keyof T
-	: T extends Map<infer K, unknown>
-	? K
-	: never;
-
-type NonEmptyObject<T> = T extends object
-	? object extends Required<T>
-		? never
-		: T
-	: T;
-
 type DisconnectFunction = () => void;
 type Ref = any;
