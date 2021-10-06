@@ -24,6 +24,6 @@ export interface ComponentEvent<TDefinition extends ComponentDefinition> {
 	) => void;
 	Replicated: (
 		data: DeepReadonly<TDefinition["data"]>,
-		oldData: DeepReadonly<TDefinition["data"]>
+		oldData: DeepReadonly<TDefinition["data"]> | undefined
 	) => void;
 }
