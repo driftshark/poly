@@ -67,6 +67,13 @@ export = () => {
 		expect(result).to.equal(newValue);
 	});
 
+	it("should be exact payload without old value", () => {
+		const newValue = [false];
+		//@ts-ignore
+		const result = getPayload(world, "FlatExact", undefined, newValue);
+		expect(result).to.equal(newValue);
+	});
+
 	it("should be diffed payload", () => {
 		const oldValue = { unchanged: "among us", change: "lol", remove: "bye" };
 		const newValue = { new: "key", unchanged: "among us", change: 23 };
@@ -80,6 +87,19 @@ export = () => {
 				new: "key",
 				change: 23,
 				remove: "_N",
+			})
+		).to.equal(true);
+	});
+
+	it("should be diffed payload without old value", () => {
+		const newValue = { new: "key", unchanged: "among us", change: 23 };
+		//@ts-ignore
+		const result = getPayload(world, "FlatDiff", undefined, newValue);
+		expect(
+			deepEquals(result, {
+				new: "key",
+				unchanged: "among us",
+				change: 23,
 			})
 		).to.equal(true);
 	});
@@ -99,6 +119,7 @@ export = () => {
 			exactChangedObject: oldValue["exactChangedObject"],
 			unchanged: oldValue["unchanged"],
 			notTracked: { among3: "us3" },
+			nowo: true,
 		};
 
 		//@ts-ignore
@@ -108,6 +129,30 @@ export = () => {
 		expect(newValue).to.never.equal(result);
 
 		expect(result).to.equal(named("None"));
+	});
+
+	it("should be non-empty payload and ignore untracked with undefined old value", () => {
+		const newValue = {
+			newPrimitive: true,
+			changedPrimitive: 24,
+			changedObject: { unchanged1: [true], red: true, newKey1: true },
+			exactChangedObject: { birds: "45" },
+			unchanged: { among1: "us1" },
+			notTracked: { among3: "us3" },
+			newKey: true,
+		};
+
+		//@ts-ignore
+		const result = getPayload(world, "KeyedComponent", undefined, newValue);
+		expect(
+			deepEquals(result, {
+				newPrimitive: true,
+				changedPrimitive: 24,
+				changedObject: { unchanged1: [true], red: true, newKey1: true },
+				exactChangedObject: { birds: "45" },
+				unchanged: { among1: "us1" },
+			})
+		).to.equal(true);
 	});
 
 	it("should be non-empty payload and ignore untracked", () => {
