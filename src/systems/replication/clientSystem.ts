@@ -1,7 +1,17 @@
 import createSystem from "createSystem";
+import { World } from "index";
 import { patchPayload } from "replication/componentUpdatePayload";
 import promiseChild from "util/promiseChild";
 import { CreateEvent, RemoveEvent, UpdateEvent } from "./events";
+
+type ConsumePayloadFunction<TDefinition extends Components[keyof Components]> =
+	| ((
+			world: World,
+			ref: Ref,
+			componentName: TDefinition["name"],
+			payload: TDefinition["data"]
+	  ) => boolean)
+	| undefined;
 
 export = createSystem(() => {
 	let cns: RBXScriptConnection[] = [];
@@ -28,6 +38,19 @@ export = createSystem(() => {
 
 					cns.push(
 						createEvent.OnClientEvent.Connect((ref, componentName, data) => {
+							//@ts-ignore
+							const consumePayload = world["componentDefinitions"][
+								componentName
+							]["consumePayload"] as ConsumePayloadFunction<
+								Components[typeof componentName]
+							>;
+
+							if (consumePayload !== undefined) {
+								if (consumePayload(world, ref, componentName, data) !== false) {
+									return;
+								}
+							}
+
 							world.addComponent(ref, componentName, data);
 						})
 					);
@@ -46,6 +69,21 @@ export = createSystem(() => {
 								oldValue,
 								payload
 							);
+
+							//@ts-ignore
+							const consumePayload = world["componentDefinitions"][
+								componentName
+							]["consumePayload"] as ConsumePayloadFunction<
+								Components[typeof componentName]
+							>;
+
+							if (consumePayload !== undefined) {
+								if (
+									consumePayload(world, ref, componentName, newData) !== false
+								) {
+									return;
+								}
+							}
 
 							world.addComponent(ref, componentName, newData);
 							world.fireEvent(
