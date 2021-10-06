@@ -9,7 +9,7 @@ export const getPayload = <
 >(
 	world: World,
 	componentName: TComponentName,
-	oldValue: Components[TComponentName]["data"],
+	oldValue: Components[TComponentName]["data"] | undefined,
 	newValue: Components[TComponentName]["data"]
 ): symbol | Map<unknown, unknown> | Components[TComponentName]["data"] => {
 	//@ts-ignore
@@ -23,7 +23,7 @@ export const getPayload = <
 
 	if (typeIs(replicateDefinition, "number")) {
 		if (replicateDefinition === ReplicationType.Diff) {
-			return diff(oldValue, newValue);
+			return diff(oldValue ?? {}, newValue);
 		} else {
 			return newValue;
 		}
@@ -32,7 +32,7 @@ export const getPayload = <
 		const payload = new Map();
 
 		for (const [key, keyReplicationType] of pairs(replicateDefinition)) {
-			if (oldValue[key as TKey] === newValue[key as TKey]) {
+			if (oldValue && oldValue![key as TKey] === newValue[key as TKey]) {
 				continue;
 			}
 
@@ -40,7 +40,7 @@ export const getPayload = <
 				payload.set(
 					key,
 					diff(
-						oldValue[key as TKey] as unknown as object,
+						((oldValue && oldValue![key as TKey]) || {}) as unknown as object,
 						newValue[key as TKey] as unknown as object
 					)
 				);
