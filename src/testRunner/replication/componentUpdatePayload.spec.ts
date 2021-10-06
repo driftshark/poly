@@ -146,6 +146,7 @@ export = () => {
 		const result = getPayload(world, "KeyedComponent", undefined, newValue);
 		expect(
 			deepEquals(result, {
+				removedPrimitive: "_N", //due to how getPayload works (iterating over the replicateDefinition), this is here
 				newPrimitive: true,
 				changedPrimitive: 24,
 				changedObject: { unchanged1: [true], red: true, newKey1: true },
