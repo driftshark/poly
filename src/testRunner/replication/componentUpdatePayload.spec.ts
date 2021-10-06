@@ -198,6 +198,85 @@ export = () => {
 		expect(deepEquals(result, newValue)).to.equal(true);
 	});
 
+	it("should patch flat exact with undefined oldValue", () => {
+		const oldValue = {};
+		const newValue = [false];
+		//@ts-ignore
+		const payload = getPayload(world, "FlatExact", oldValue, newValue);
+
+		//@ts-ignore
+		const result = patchPayload(world, "FlatExact", undefined, payload);
+		expect(oldValue).to.never.equal(newValue);
+		expect(oldValue).to.never.equal(result);
+		expect(payload).to.equal(newValue);
+		expect(result).to.equal(newValue);
+		expect(deepEquals(result, [false])).to.equal(true);
+	});
+
+	it("should patch flat diff with undefined oldValue", () => {
+		const oldValue = { unchanged: "among us", change: "lol", remove: "bye" };
+		const newValue = { new: "key", unchanged: "among us", change: 23 };
+		//@ts-ignore
+		const payload = getPayload(world, "FlatDiff", oldValue, newValue);
+
+		//@ts-ignore
+		const result = patchPayload(world, "FlatDiff", undefined, payload);
+		expect(oldValue).to.never.equal(newValue);
+		expect(oldValue).to.never.equal(result);
+		expect(oldValue).to.never.equal(payload);
+		expect(payload).to.never.equal(newValue);
+		expect(result).to.never.equal(newValue);
+		expect(result).to.never.equal(payload);
+		expect(deepEquals(result, { new: "key", change: 23 })).to.equal(true);
+	});
+
+	it("should patch with undefined oldValue", () => {
+		const unchang = [true];
+		const oldValue = {
+			removedPrimitive: 1,
+			changedPrimitive: "us",
+			changedObject: { unchanged1: unchang, red: false, turtle: "green" },
+			exactChangedObject: { green: "red" },
+			unchanged: { among1: "us1" },
+			notTracked: { among2: "us2" },
+			extraField: true,
+		};
+
+		const newValue = {
+			newPrimitive: true,
+			changedPrimitive: 24,
+			changedObject: { unchanged1: unchang, red: true, newKey1: true },
+			exactChangedObject: { birds: "45" },
+			unchanged: oldValue["unchanged"],
+			notTracked: { among3: "us3" },
+			newKey: false,
+		};
+
+		const payload = getPayload(
+			world,
+			//@ts-ignore
+			"KeyedComponent",
+			oldValue,
+			newValue
+		) as typeof newValue;
+		const result = patchPayload(
+			world,
+			//@ts-ignore
+			"KeyedComponent",
+			undefined,
+			payload
+		) as typeof newValue;
+
+		expect(
+			deepEquals(result, {
+				newPrimitive: true,
+				changedPrimitive: 24,
+				changedObject: { red: true, newKey1: true },
+				exactChangedObject: { birds: "45" },
+			})
+		).to.equal(true);
+	});
+
 	//for keyed ReplicationTypes
 	it("should patch the included fields", () => {
 		const unchang = [true];
