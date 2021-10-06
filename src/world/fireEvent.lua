@@ -1,7 +1,7 @@
 local symbol = require(script.Parent.Parent.util.symbol)
 local BASE_SYMBOL = symbol.named("base")
 
-return function(self, componentName, eventName, ref, ...)
+return function(self, ref, componentName, eventName, ...)
 	local componentListeners = self.events[componentName]
 	if componentListeners == nil then
 		return

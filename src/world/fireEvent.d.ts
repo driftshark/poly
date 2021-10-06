@@ -7,9 +7,9 @@ declare function fireEvent<
 	TEvent extends keyof ComponentEvent<Components[TComponentName]>
 >(
 	this: World,
+	ref: t.static<Components[TComponentName]["refValidator"]>,
 	componentName: TComponentName,
 	eventName: TEvent,
-	ref: t.static<Components[TComponentName]["refValidator"]>,
 	...args: Parameters<ComponentEvent<Components[TComponentName]>[TEvent]>
 ): void;
 

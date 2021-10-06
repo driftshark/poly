@@ -105,17 +105,17 @@ export class World {
 
 		if ((old as string) !== undefined) {
 			this.fireEvent(
+				ref,
 				componentName,
 				"Updated",
-				ref,
 				data as DeepReadonly<typeof data>,
 				old
 			);
 		} else {
 			this.fireEvent(
+				ref,
 				componentName,
 				"Created",
-				ref,
 				data as DeepReadonly<typeof data>
 			);
 		}
@@ -155,9 +155,9 @@ export class World {
 				| undefined;
 			if ((old as string) !== undefined) {
 				this.fireEvent(
+					ref,
 					componentName,
 					"Removing",
-					ref,
 					old as DeepReadonly<NonNullable<typeof old>>
 				);
 			}
