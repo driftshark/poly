@@ -64,7 +64,7 @@ export const patchPayload = <
 >(
 	world: World,
 	componentName: TComponentName,
-	oldValue: Components[TComponentName]["data"],
+	oldValue: Components[TComponentName]["data"] | undefined,
 	payload: Components[TComponentName]["data"]
 ) => {
 	//@ts-ignore
@@ -78,17 +78,17 @@ export const patchPayload = <
 
 	if (typeIs(replicateDefinition, "number")) {
 		if (replicateDefinition === ReplicationType.Diff) {
-			return patch(oldValue, payload);
+			return patch(oldValue ?? {}, payload);
 		} else {
 			return payload;
 		}
 	} else {
-		const newValue = shallow(oldValue);
+		const newValue = shallow(oldValue ?? {});
 
 		for (const [key, value] of pairs(payload)) {
 			if (replicateDefinition[key as TKey] === ReplicationType.Diff) {
 				//@ts-ignore
-				newValue[key] = patch(oldValue[key], value);
+				newValue[key] = patch(newValue[key] ?? {}, value);
 			} else {
 				if (value === "_N") {
 					//@ts-ignore
