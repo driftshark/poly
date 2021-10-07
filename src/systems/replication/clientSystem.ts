@@ -2,7 +2,13 @@ import createSystem from "createSystem";
 import { World } from "index";
 import { patchPayload } from "replication/componentUpdatePayload";
 import promiseChild from "util/promiseChild";
-import { CreateEvent, RemoveEvent, UpdateEvent } from "./events";
+import {
+	BulkCreateEvent,
+	BulkRemoveEvent,
+	CreateEvent,
+	RemoveEvent,
+	UpdateEvent,
+} from "./events";
 
 type ConsumePayloadFunction<TDefinition extends Components[keyof Components]> =
 	| ((
@@ -29,12 +35,16 @@ export = createSystem(() => {
 						promiseChild(value!, `Create_${world.name}`, math.huge),
 						promiseChild(value!, `Update_${world.name}`, math.huge),
 						promiseChild(value!, `Remove_${world.name}`, math.huge),
+						promiseChild(value!, `BulkCreate_${world.name}`, math.huge),
+						promiseChild(value!, `BulkRemove_${world.name}`, math.huge),
 					]);
 				})
 				.then((remotes) => {
 					const createEvent = remotes[0] as CreateEvent;
 					const updateEvent = remotes[1] as UpdateEvent;
 					const removeEvent = remotes[2] as RemoveEvent;
+					const bulkCreateEvent = remotes[3] as BulkCreateEvent;
+					const bulkRemoveEvent = remotes[4] as BulkRemoveEvent;
 
 					cns.push(
 						createEvent.OnClientEvent.Connect((ref, componentName, data) => {
@@ -99,6 +109,32 @@ export = createSystem(() => {
 					cns.push(
 						removeEvent.OnClientEvent.Connect((ref, componentName) => {
 							world.removeComponent(ref, componentName);
+						})
+					);
+
+					cns.push(
+						bulkCreateEvent.OnClientEvent.Connect((descriptions) => {
+							for (const [componentName, descriptionArray] of pairs(
+								descriptions
+							)) {
+								for (const description of descriptionArray) {
+									world.addComponent(
+										description[0],
+										componentName,
+										description[1]
+									);
+								}
+							}
+						})
+					);
+
+					cns.push(
+						bulkRemoveEvent.OnClientEvent.Connect((descriptions) => {
+							for (const [componentName, refArray] of pairs(descriptions)) {
+								for (const ref of refArray) {
+									world.removeComponent(ref, componentName);
+								}
+							}
 						})
 					);
 				});
