@@ -47,3 +47,9 @@ export type BulkRemoveEvent = RemoteEvent<
 		>[];
 	}) => void
 >;
+
+export type BulkRemoveEventParameters = BulkRemoveEvent extends RemoteEvent<
+	infer Callback
+>
+	? Parameters<Callback>
+	: never;
