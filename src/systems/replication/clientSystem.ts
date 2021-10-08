@@ -5,6 +5,8 @@ import promiseChild from "util/promiseChild";
 import {
 	BulkCreateEvent,
 	BulkRemoveEvent,
+	BulkRemoveEventComponentToDescription,
+	BulkType,
 	CreateEvent,
 	RemoveEvent,
 	UpdateEvent,
@@ -129,13 +131,23 @@ export = createSystem(() => {
 					);
 
 					cns.push(
-						bulkRemoveEvent.OnClientEvent.Connect((descriptions) => {
-							for (const [componentName, refArray] of pairs(descriptions)) {
-								for (const ref of refArray) {
-									world.removeComponent(ref, componentName);
+						bulkRemoveEvent.OnClientEvent.Connect(
+							(bulkType, descriptions, ref) => {
+								if (bulkType === BulkType.RefToComponents) {
+									for (const componentName of descriptions) {
+										world.removeComponent(ref, componentName);
+									}
+								} else if (bulkType === BulkType.ComponentToDescription) {
+									for (const [componentName, refArray] of pairs(
+										descriptions as Parameters<BulkRemoveEventComponentToDescription>[1]
+									)) {
+										for (const ref of refArray) {
+											world.removeComponent(ref, componentName);
+										}
+									}
 								}
 							}
-						})
+						)
 					);
 				});
 		},
