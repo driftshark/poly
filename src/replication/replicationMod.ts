@@ -17,7 +17,7 @@ export = function <
 								: Exclude<ReplicationType, ReplicationType.Diff>;
 					  }
 			: Exclude<ReplicationType, ReplicationType.Diff>;
-		consumePayload: //if the function returns false, the client system will assume the payload has not been consumed and will carry out the normal operation
+		consumePayload: //if the function returns true, the client system will assume the payload has been consumed and will not `addComponent`
 		| ((
 					world: World,
 					ref: Ref,

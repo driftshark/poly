@@ -12,12 +12,12 @@ import {
 	UpdateEvent,
 } from "../../replication/events";
 
-type ConsumePayloadFunction<TDefinition extends Components[keyof Components]> =
+type ConsumePayloadFunction =
 	| ((
 			world: World,
 			ref: Ref,
-			componentName: TDefinition["name"],
-			payload: TDefinition["data"]
+			componentName: Components[keyof Components]["name"],
+			payload: Components[keyof Components]["data"]
 	  ) => boolean)
 	| undefined;
 
@@ -53,12 +53,10 @@ export = createSystem(() => {
 							//@ts-ignore
 							const consumePayload = world["componentDefinitions"][
 								componentName
-							]["consumePayload"] as ConsumePayloadFunction<
-								Components[typeof componentName]
-							>;
+							]["consumePayload"] as ConsumePayloadFunction;
 
 							if (consumePayload !== undefined) {
-								if (consumePayload(world, ref, componentName, data) !== false) {
+								if (consumePayload(world, ref, componentName, data) === true) {
 									return;
 								}
 							}
@@ -85,13 +83,11 @@ export = createSystem(() => {
 							//@ts-ignore
 							const consumePayload = world["componentDefinitions"][
 								componentName
-							]["consumePayload"] as ConsumePayloadFunction<
-								Components[typeof componentName]
-							>;
+							]["consumePayload"] as ConsumePayloadFunction;
 
 							if (consumePayload !== undefined) {
 								if (
-									consumePayload(world, ref, componentName, newData) !== false
+									consumePayload(world, ref, componentName, newData) === true
 								) {
 									return;
 								}
@@ -119,12 +115,38 @@ export = createSystem(() => {
 							for (const [componentName, descriptionArray] of pairs(
 								descriptions
 							)) {
-								for (const description of descriptionArray) {
-									world.addComponent(
-										description[0],
-										componentName,
-										description[1]
-									);
+								//@ts-ignore
+								const consumePayload = world["componentDefinitions"][
+									componentName
+								]["consumePayload"] as ConsumePayloadFunction;
+
+								if (consumePayload !== undefined) {
+									for (const description of descriptionArray) {
+										if (
+											consumePayload(
+												world,
+												description[0],
+												componentName,
+												description[1]
+											) === true
+										) {
+											continue;
+										}
+
+										world.addComponent(
+											description[0],
+											componentName,
+											description[1]
+										);
+									}
+								} else {
+									for (const description of descriptionArray) {
+										world.addComponent(
+											description[0],
+											componentName,
+											description[1]
+										);
+									}
 								}
 							}
 						})
