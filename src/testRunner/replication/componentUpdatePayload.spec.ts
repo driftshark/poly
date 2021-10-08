@@ -61,7 +61,7 @@ export = () => {
 		const oldValue = {};
 		const newValue = [false];
 		//@ts-ignore
-		const result = getPayload(world, "FlatExact", oldValue, newValue);
+		const result = getPayload(world, "FlatExact", newValue, oldValue);
 		expect(oldValue).to.never.equal(newValue);
 		expect(oldValue).to.never.equal(result);
 		expect(result).to.equal(newValue);
@@ -70,7 +70,7 @@ export = () => {
 	it("should be exact payload without old value", () => {
 		const newValue = [false];
 		//@ts-ignore
-		const result = getPayload(world, "FlatExact", undefined, newValue);
+		const result = getPayload(world, "FlatExact", newValue, undefined);
 		expect(result).to.equal(newValue);
 	});
 
@@ -78,7 +78,7 @@ export = () => {
 		const oldValue = { unchanged: "among us", change: "lol", remove: "bye" };
 		const newValue = { new: "key", unchanged: "among us", change: 23 };
 		//@ts-ignore
-		const result = getPayload(world, "FlatDiff", oldValue, newValue);
+		const result = getPayload(world, "FlatDiff", newValue, oldValue);
 		expect(oldValue).to.never.equal(newValue);
 		expect(oldValue).to.never.equal(result);
 		expect(newValue).to.never.equal(result);
@@ -94,7 +94,7 @@ export = () => {
 	it("should be diffed payload without old value", () => {
 		const newValue = { new: "key", unchanged: "among us", change: 23 };
 		//@ts-ignore
-		const result = getPayload(world, "FlatDiff", undefined, newValue);
+		const result = getPayload(world, "FlatDiff", newValue, undefined);
 		expect(
 			deepEquals(result, {
 				new: "key",
@@ -123,7 +123,7 @@ export = () => {
 		};
 
 		//@ts-ignore
-		const result = getPayload(world, "KeyedComponent", oldValue, newValue);
+		const result = getPayload(world, "KeyedComponent", newValue, oldValue);
 		expect(oldValue).to.never.equal(newValue);
 		expect(oldValue).to.never.equal(result);
 		expect(newValue).to.never.equal(result);
@@ -143,7 +143,7 @@ export = () => {
 		};
 
 		//@ts-ignore
-		const result = getPayload(world, "KeyedComponent", undefined, newValue);
+		const result = getPayload(world, "KeyedComponent", newValue, undefined);
 		expect(
 			deepEquals(result, {
 				removedPrimitive: "_N", //due to how getPayload works (iterating over the replicateDefinition), this is here
@@ -178,7 +178,7 @@ export = () => {
 		};
 
 		//@ts-ignore
-		const result = getPayload(world, "KeyedComponent", oldValue, newValue);
+		const result = getPayload(world, "KeyedComponent", newValue, oldValue);
 		expect(oldValue).to.never.equal(newValue);
 		expect(oldValue).to.never.equal(result);
 		expect(newValue).to.never.equal(result);
@@ -216,7 +216,7 @@ export = () => {
 		const oldValue = {};
 		const newValue = [false];
 		//@ts-ignore
-		const payload = getPayload(world, "FlatExact", oldValue, newValue);
+		const payload = getPayload(world, "FlatExact", newValue, oldValue);
 
 		//@ts-ignore
 		const result = patchPayload(world, "FlatExact", oldValue, payload);
@@ -231,7 +231,7 @@ export = () => {
 		const oldValue = { unchanged: "among us", change: "lol", remove: "bye" };
 		const newValue = { new: "key", unchanged: "among us", change: 23 };
 		//@ts-ignore
-		const payload = getPayload(world, "FlatDiff", oldValue, newValue);
+		const payload = getPayload(world, "FlatDiff", newValue, oldValue);
 
 		//@ts-ignore
 		const result = patchPayload(world, "FlatDiff", oldValue, payload);
@@ -248,7 +248,7 @@ export = () => {
 		const oldValue = {};
 		const newValue = [false];
 		//@ts-ignore
-		const payload = getPayload(world, "FlatExact", oldValue, newValue);
+		const payload = getPayload(world, "FlatExact", newValue, oldValue);
 
 		//@ts-ignore
 		const result = patchPayload(world, "FlatExact", undefined, payload);
@@ -263,7 +263,7 @@ export = () => {
 		const oldValue = { unchanged: "among us", change: "lol", remove: "bye" };
 		const newValue = { new: "key", unchanged: "among us", change: 23 };
 		//@ts-ignore
-		const payload = getPayload(world, "FlatDiff", oldValue, newValue);
+		const payload = getPayload(world, "FlatDiff", newValue, oldValue);
 
 		//@ts-ignore
 		const result = patchPayload(world, "FlatDiff", undefined, payload);
@@ -302,8 +302,8 @@ export = () => {
 			world,
 			//@ts-ignore
 			"KeyedComponent",
-			oldValue,
-			newValue
+			newValue,
+			oldValue
 		) as typeof newValue;
 		const result = patchPayload(
 			world,
@@ -350,8 +350,8 @@ export = () => {
 			world,
 			//@ts-ignore
 			"KeyedComponent",
-			oldValue,
-			newValue
+			newValue,
+			oldValue
 		) as typeof newValue;
 		const result = patchPayload(
 			world,

@@ -9,8 +9,8 @@ export const getPayload = <
 >(
 	world: World,
 	componentName: TComponentName,
-	oldValue: Components[TComponentName]["data"] | undefined,
-	newValue: Components[TComponentName]["data"]
+	newValue: Components[TComponentName]["data"],
+	oldValue: Components[TComponentName]["data"] | undefined
 ): symbol | Map<unknown, unknown> | Components[TComponentName]["data"] => {
 	//@ts-ignore
 	const replicateDefinition = world["componentDefinitions"][componentName][
