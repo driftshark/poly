@@ -1,5 +1,10 @@
 import { t } from "@rbxts/t";
 
+export const enum BulkType {
+	ComponentToDescription = 0,
+	RefToComponents = 1,
+}
+
 export type CreateEvent = RemoteEvent<
 	<TComponentName extends keyof Components>(
 		ref: t.static<Components[TComponentName]["refValidator"]>,
@@ -8,20 +13,14 @@ export type CreateEvent = RemoteEvent<
 	) => void
 >;
 
-export type BulkCreateEvent = RemoteEvent<
-	(descriptions: {
-		[TComponentName in keyof Components]?: [
-			t.static<Components[TComponentName]["refValidator"]>,
-			Components[TComponentName]["data"]
-		][];
-	}) => void
->;
+export type BulkCreateEventCallback = (descriptions: {
+	[TComponentName in keyof Components]?: [
+		t.static<Components[TComponentName]["refValidator"]>,
+		Components[TComponentName]["data"]
+	][];
+}) => void;
 
-export type BulkCreateEventParameters = BulkCreateEvent extends RemoteEvent<
-	infer Callback
->
-	? Parameters<Callback>
-	: never;
+export type BulkCreateEvent = RemoteEvent<BulkCreateEventCallback>;
 
 export type UpdateEvent = RemoteEvent<
 	<TComponentName extends keyof Components>(
@@ -40,16 +39,21 @@ export type RemoveEvent = RemoteEvent<
 	) => void
 >;
 
-export type BulkRemoveEvent = RemoteEvent<
-	(descriptions: {
+export type BulkRemoveEventComponentToDescription = (
+	bulkType: BulkType.ComponentToDescription,
+	descriptions: {
 		[TComponentName in keyof Components]?: t.static<
 			Components[TComponentName]["refValidator"]
 		>[];
-	}) => void
->;
+	}
+) => void;
 
-export type BulkRemoveEventParameters = BulkRemoveEvent extends RemoteEvent<
-	infer Callback
->
-	? Parameters<Callback>
-	: never;
+export type BulkRemoveEventRefToComponents = (
+	bulkType: BulkType.RefToComponents,
+	descriptions: (keyof Components)[],
+	ref: Ref
+) => void;
+
+export type BulkRemoveEvent = RemoteEvent<
+	BulkRemoveEventComponentToDescription | BulkRemoveEventRefToComponents
+>;
