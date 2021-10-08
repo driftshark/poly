@@ -10,7 +10,7 @@ import {
 	CreateEvent,
 	RemoveEvent,
 	UpdateEvent,
-} from "./events";
+} from "../../replication/events";
 
 type ConsumePayloadFunction<TDefinition extends Components[keyof Components]> =
 	| ((
