@@ -3,7 +3,7 @@ import { World } from "index";
 import { ReplicationType } from "replication";
 
 /** Add replication to the definition */
-export default function <
+export = function <
 	TDefinition extends ComponentDefinition,
 	TReturnType extends TDefinition & {
 		replicate: TDefinition["data"] extends object
@@ -35,4 +35,4 @@ export default function <
 	(definition as TReturnType).consumePayload = consumePayload;
 
 	return definition as TReturnType;
-}
+};
