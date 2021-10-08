@@ -17,9 +17,8 @@ import {
 	GroupIdToSubscribers,
 	ReplicatedComponents,
 } from "../../replication/cache";
-import compileNewBatchData from "../../replication/server/compileNewBatchData";
-import getReplicableData from "../../replication/server/getReplicableData";
 import { getPayload } from "replication/componentUpdatePayload";
+import createUtilities from "replication/server/createUtilities";
 
 const None = named("None");
 
@@ -33,6 +32,13 @@ export = createSystem(() => {
 	return {
 		name: "Replication",
 		init: (world) => {
+			const { compileNewBatchData, getReplicableData } = createUtilities(
+				world,
+				groupIdToEntity,
+				groupIdToSubscribers,
+				replicatedComponents
+			);
+
 			const remotesFolder = getRemotesFolderServer();
 
 			const createComponentEvent = createRemoteEvent<CreateEvent>(
@@ -132,12 +138,7 @@ export = createSystem(() => {
 
 					groupIdToSubscribers[groupId]!.set(ref, true);
 
-					const batchData = compileNewBatchData(
-						world,
-						groupIdToEntity,
-						replicatedComponents,
-						groupId
-					);
+					const batchData = compileNewBatchData(groupId);
 					if (batchData !== undefined) {
 						bulkCreateComponentEvent.FireClient(ref, batchData);
 					}
@@ -209,12 +210,7 @@ export = createSystem(() => {
 
 								groupIdToSubscribers[groupId]!.set(ref, true);
 
-								const batchData = compileNewBatchData(
-									world,
-									groupIdToEntity,
-									replicatedComponents,
-									groupId
-								);
+								const batchData = compileNewBatchData(groupId);
 								if (batchData !== undefined) {
 									bulkCreateComponentEvent.FireClient(ref, batchData);
 								}
@@ -262,7 +258,6 @@ export = createSystem(() => {
 
 							if (groupIdToSubscribers[componentGroupId] !== undefined) {
 								const replicatedData = getReplicableData(
-									replicatedComponents,
 									//@ts-ignore
 									componentName,
 									world.getComponent(ref, componentName)!
@@ -352,12 +347,8 @@ export = createSystem(() => {
 									if (subscribers !== undefined) {
 										const data = world.getComponent(ref, key);
 										if (data !== undefined) {
-											const replicatedData = getReplicableData(
-												replicatedComponents,
-												//@ts-ignore
-												key,
-												data
-											);
+											//@ts-ignore
+											const replicatedData = getReplicableData(key, data);
 
 											if (replicatedData !== None) {
 												for (const [subscriber] of subscribersToOldGroupId) {
@@ -411,12 +402,8 @@ export = createSystem(() => {
 									if (subscribers !== undefined) {
 										const data = world.getComponent(ref, key);
 										if (data !== undefined) {
-											const replicatedData = getReplicableData(
-												replicatedComponents,
-												//@ts-ignore
-												key,
-												data
-											);
+											//@ts-ignore
+											const replicatedData = getReplicableData(key, data);
 
 											if (replicatedData !== None) {
 												notifySubscribers(
