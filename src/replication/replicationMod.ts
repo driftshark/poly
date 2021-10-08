@@ -1,31 +1,22 @@
-import { t } from "@rbxts/t";
 import { ComponentDefinition } from "Component";
 import { World } from "index";
 import { ReplicationType } from "replication";
 
-/** Add replication to the definition
- *
- * Note that using `ReplicationType.Attribute` for multiple values with the same key has undefined behavior.
- */
+/** Add replication to the definition */
 export default function <
 	TDefinition extends ComponentDefinition,
-	TReplicationType extends t.static<
-		TDefinition["refValidator"]
-	> extends Instance
-		? ReplicationType
-		: Exclude<ReplicationType, ReplicationType.Attribute>,
 	TReturnType extends TDefinition & {
 		replicate: TDefinition["data"] extends object
 			?
-					| TReplicationType
+					| ReplicationType
 					| {
 							[key in keyof Required<TDefinition["data"]>]?: Required<
 								TDefinition["data"]
 							>[key] extends object
-								? TReplicationType
-								: Exclude<TReplicationType, ReplicationType.Diff>;
+								? ReplicationType
+								: Exclude<ReplicationType, ReplicationType.Diff>;
 					  }
-			: Exclude<TReplicationType, ReplicationType.Diff>;
+			: Exclude<ReplicationType, ReplicationType.Diff>;
 		consumePayload: //if the function returns false, the client system will assume the payload has not been consumed and will carry out the normal operation
 		| ((
 					world: World,
