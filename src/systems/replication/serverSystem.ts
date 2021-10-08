@@ -355,7 +355,7 @@ export = createSystem(() => {
 											const replicatedData = getReplicableData(
 												replicatedComponents,
 												//@ts-ignore
-												componentName,
+												key,
 												data
 											);
 
@@ -414,7 +414,7 @@ export = createSystem(() => {
 											const replicatedData = getReplicableData(
 												replicatedComponents,
 												//@ts-ignore
-												componentName,
+												key,
 												data
 											);
 
