@@ -40,7 +40,8 @@ export const getPayload = <
 				payload.set(
 					key,
 					diff(
-						((oldValue && oldValue![key as TKey]) || {}) as unknown as object,
+						((oldValue !== undefined && oldValue![key as TKey]) ??
+							{}) as unknown as object,
 						newValue[key as TKey] as unknown as object
 					)
 				);
