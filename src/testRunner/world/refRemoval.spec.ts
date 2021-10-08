@@ -12,7 +12,7 @@ export = () => {
 
 		world.addComponent(
 			TEST_REF,
-			"ReplicationGroup",
+			"ReplicationGroup", //@ts-ignore
 			new Map([["among", "us"]])
 		);
 
@@ -24,7 +24,7 @@ export = () => {
 
 		world.addComponent(
 			TEST_REF_2,
-			"ReplicationGroup",
+			"ReplicationGroup", //@ts-ignore
 			new Map([["the", "skeld"]])
 		);
 

@@ -8,6 +8,7 @@ export = () => {
 
 	const TEST_REF = "testRef";
 
+	//@ts-ignore
 	world.addComponent(TEST_REF, "ReplicationGroup", new Map([["among", "us"]]));
 
 	it("should get refs with component", () => {

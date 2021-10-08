@@ -38,7 +38,7 @@ export = () => {
 			}
 		);
 
-		world.addComponent(TEST_REF, "ReplicationGroup", new Map());
+		world.addComponent(TEST_REF, "ReplicationGroup", {});
 
 		expect(count).to.equal(3);
 

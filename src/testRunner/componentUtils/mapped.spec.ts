@@ -9,6 +9,7 @@ export = () => {
 
 	it("should create mapped component", () => {
 		const add = new Map([["among", "us"]]);
+		//@ts-ignore
 		addMappedComponent(world, TEST_REF, "Old", "ReplicationGroup", add);
 
 		expect(

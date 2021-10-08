@@ -25,10 +25,10 @@ export = () => {
 			})
 		).to.equal(true);
 
-		world.addComponent(TEST_REF, "ReplicationGroup", new Map());
+		world.addComponent(TEST_REF, "ReplicationGroup", {});
 		expect(count).to.equal(1);
 		disconnectFn();
-		world.addComponent(TEST_REF_2, "ReplicationGroup", new Map());
+		world.addComponent(TEST_REF_2, "ReplicationGroup", {});
 		expect(count).to.equal(1);
 
 		expect(deepEquals(world["events"], {})).to.equal(true);
@@ -55,10 +55,10 @@ export = () => {
 			})
 		).to.equal(true);
 
-		world.addComponent(TEST_REF, "ReplicationGroup", new Map());
+		world.addComponent(TEST_REF, "ReplicationGroup", {});
 		expect(count).to.equal(1);
 		disconnectFn();
-		world.addComponent(TEST_REF_2, "ReplicationGroup", new Map());
+		world.addComponent(TEST_REF_2, "ReplicationGroup", {});
 		expect(count).to.equal(1);
 
 		expect(deepEquals(world["events"], {})).to.equal(true);
@@ -77,11 +77,11 @@ export = () => {
 			})
 		).to.equal(true);
 
-		world.addComponent(TEST_REF, "ReplicationGroup", new Map());
+		world.addComponent(TEST_REF, "ReplicationGroup", {});
 		expect(count).to.equal(1);
 		disconnectFn();
 		world.removeComponent(TEST_REF, "ReplicationGroup");
-		world.addComponent(TEST_REF, "ReplicationGroup", new Map());
+		world.addComponent(TEST_REF, "ReplicationGroup", {});
 		expect(count).to.equal(1);
 
 		expect(deepEquals(world["events"], {})).to.equal(true);
