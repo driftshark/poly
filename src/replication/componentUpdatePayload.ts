@@ -37,13 +37,15 @@ export const getPayload = <
 			}
 
 			if (keyReplicationType === ReplicationType.Diff) {
+				let oldToDiff;
+				if (oldValue !== undefined) {
+					oldToDiff = oldValue![key as TKey] ?? {};
+				} else {
+					oldToDiff = {};
+				}
 				payload.set(
 					key,
-					diff(
-						((oldValue !== undefined && oldValue![key as TKey]) ??
-							{}) as unknown as object,
-						newValue[key as TKey] as unknown as object
-					)
+					diff(oldToDiff, newValue[key as TKey] as unknown as object)
 				);
 			} else {
 				if (newValue[key as TKey] === undefined) {
