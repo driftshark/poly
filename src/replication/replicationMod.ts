@@ -2,7 +2,12 @@ import { ComponentDefinition } from "Component";
 import { World } from "index";
 import { ReplicationType } from "replication";
 
-/** Add replication to the definition */
+/** Add replication to the definition
+ *
+ * If `consumePayload` returns true, the client system will assume the payload has been consumed and will not `addComponent`.
+ *
+ * If the `isUpdate` parameter of `consumePayload` is true, if the `ReplicationType` is `Diff`, the payload will not exactly be the data of the component.
+ */
 export = function <
 	TDefinition extends ComponentDefinition,
 	TReturnType extends TDefinition & {
@@ -22,7 +27,8 @@ export = function <
 					world: World,
 					ref: Ref,
 					componentName: TDefinition["name"],
-					payload: TDefinition["data"]
+					payload: TDefinition["data"],
+					isUpdate: boolean
 			  ) => boolean)
 			| undefined;
 	}

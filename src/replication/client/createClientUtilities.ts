@@ -19,7 +19,8 @@ type ConsumePayloadFunction =
 			world: World,
 			ref: Ref,
 			componentName: Components[keyof Components]["name"],
-			payload: Components[keyof Components]["data"]
+			payload: Components[keyof Components]["data"],
+			isUpdate: boolean
 	  ) => boolean)
 	| undefined;
 
@@ -37,7 +38,7 @@ export = (world: World) => {
 		] as ConsumePayloadFunction;
 
 		if (consumePayload !== undefined) {
-			if (consumePayload(world, ref, componentName, data) === true) {
+			if (consumePayload(world, ref, componentName, data, false) === true) {
 				return;
 			}
 		}
@@ -52,22 +53,22 @@ export = (world: World) => {
 	) => {
 		type ComponentData = Components[typeof componentName]["data"];
 
-		const oldValue = world.getComponent(ref, componentName) as
-			| DeepWritable<ComponentData>
-			| undefined;
-
-		const newData = patchPayload(world, componentName, oldValue, payload);
-
 		//@ts-ignore
 		const consumePayload = componentDefinitions[componentName][
 			"consumePayload"
 		] as ConsumePayloadFunction;
 
 		if (consumePayload !== undefined) {
-			if (consumePayload(world, ref, componentName, newData) === true) {
+			if (consumePayload(world, ref, componentName, payload, true) === true) {
 				return;
 			}
 		}
+
+		const oldValue = world.getComponent(ref, componentName) as
+			| DeepWritable<ComponentData>
+			| undefined;
+
+		const newData = patchPayload(world, componentName, oldValue, payload);
 
 		world.addComponent(ref, componentName, newData);
 		world.fireEvent(
@@ -99,7 +100,8 @@ export = (world: World) => {
 							world,
 							description[0],
 							componentName,
-							description[1]
+							description[1],
+							false
 						) === true
 					) {
 						continue;
