@@ -53,15 +53,22 @@ const exactReplicatedComponentWithInteract = replicationMod(
 const keyedReplicatedComponent = replicationMod(
 	defineComponent({
 		name: "KeyedReplicatedComponent",
-		data: <{ among: string; us: boolean; fortnite: number; excluded: boolean }>(
-			(<unknown>true)
-		),
+		data: <
+			{
+				among: string;
+				us: boolean;
+				fortnite: number;
+				excluded: boolean;
+				obj: { among?: "us" };
+			}
+		>(<unknown>true),
 		refValidator: t.any,
 	}),
 	{
 		among: ReplicationType.Exact,
 		us: ReplicationType.Exact,
 		fortnite: ReplicationType.Exact,
+		obj: ReplicationType.Diff,
 	}
 );
 
