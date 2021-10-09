@@ -18,7 +18,7 @@ import {
 	ReplicatedComponents,
 } from "../../replication/cache";
 import { getPayload } from "replication/componentUpdatePayload";
-import createUtilities from "replication/server/createUtilities";
+import createServerUtilities from "replication/server/createServerUtilities";
 
 const None = named("None");
 
@@ -32,7 +32,7 @@ export = createSystem(() => {
 	return {
 		name: "Replication",
 		init: (world) => {
-			const { compileNewBatchData, getReplicableData } = createUtilities(
+			const { compileNewBatchData, getReplicableData } = createServerUtilities(
 				world,
 				groupIdToEntity,
 				groupIdToSubscribers,
