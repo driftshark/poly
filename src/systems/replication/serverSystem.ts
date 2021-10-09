@@ -1,5 +1,4 @@
 import createSystem from "createSystem";
-import { named } from "util/symbol";
 import {
 	BulkCreateEvent,
 	BulkRemoveEvent,
@@ -15,8 +14,6 @@ import {
 	ReplicatedComponents,
 } from "../../replication/cache";
 import createServerUtilities from "replication/server/createServerUtilities";
-
-const None = named("None");
 
 export = createSystem(() => {
 	let groupIdToEntity: GroupIdToEntity = {};
