@@ -8,6 +8,8 @@ const None = symbol.named("None");
 export { symbol, None };
 
 export { ReplicationType } from "./replication";
-export { default as replicationMod } from "./replication/replicationMod";
+
+import replicationMod from "./replication/replicationMod";
+export { replicationMod };
 export * from "./componentUtils/layered";
 export * from "./componentUtils/mapped";
