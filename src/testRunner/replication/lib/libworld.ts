@@ -13,6 +13,15 @@ const exactReplicatedComponent = replicationMod(
 	ReplicationType.Exact
 );
 
+const exactReplicatedComponentObject = replicationMod(
+	defineComponent({
+		name: "ExactReplicatedComponentObject",
+		data: <{ among: string }>(<unknown>true),
+		refValidator: t.any,
+	}),
+	ReplicationType.Exact
+);
+
 const exactReplicatedComponentWithConsumer = replicationMod(
 	defineComponent({
 		name: "ExactReplicatedComponentWithConsumer",
@@ -59,8 +68,20 @@ const keyedReplicatedComponent = replicationMod(
 const libworld = new World("test world");
 
 libworld.registerComponent(exactReplicatedComponent);
+libworld.registerComponent(exactReplicatedComponentObject);
 libworld.registerComponent(exactReplicatedComponentWithConsumer);
 libworld.registerComponent(exactReplicatedComponentWithInteract);
 libworld.registerComponent(keyedReplicatedComponent);
 
-export = libworld;
+const libReplicatedComponents = {};
+for (const [componentName, componentDefinition] of pairs(
+	libworld["componentDefinitions"]
+)) {
+	if ("replicate" in componentDefinition) {
+		//@ts-ignore
+		libReplicatedComponents[componentName] = componentDefinition.replicate;
+	}
+}
+
+export { libReplicatedComponents };
+export default libworld;
