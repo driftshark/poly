@@ -9,13 +9,11 @@ import {
 } from "../../replication/events";
 import getRemotesFolderServer from "../../replication/server/getRemotesFolderServer";
 import createRemoteEvent from "../../replication/server/createRemoteEvent";
-import { notifySubscribers } from "../../replication/server/notifySubscribers";
 import {
 	GroupIdToEntity,
 	GroupIdToSubscribers,
 	ReplicatedComponents,
 } from "../../replication/cache";
-import { getPayload } from "replication/componentUpdatePayload";
 import createServerUtilities from "replication/server/createServerUtilities";
 
 const None = named("None");
@@ -55,6 +53,7 @@ export = createSystem(() => {
 
 			//...
 			const {
+				createReplicatedComponentCallback,
 				handleNewReplicationSubscription,
 				handleRemovingReplicationSubscription,
 				handleNewReplicationGroup,
@@ -68,6 +67,7 @@ export = createSystem(() => {
 				replicatedComponents,
 				createComponentEvent,
 				bulkCreateComponentEvent,
+				updateComponentEvent,
 				removeComponentEvent,
 				bulkRemoveComponentEvent
 			);
@@ -89,50 +89,10 @@ export = createSystem(() => {
 						componentDefinition["replicate"];
 
 					disconnectFns.push(
-						world.onComponent(componentName, (componentEvent, ref, ...args) => {
-							const groupId = world.getComponent(ref, "ReplicationGroup")?.[
-								componentName
-							];
-							if (groupId === undefined) return;
-
-							const subscribers = groupIdToSubscribers[groupId];
-							if (subscribers === undefined) return;
-
-							if (componentEvent === "Updated") {
-								const payload = getPayload(
-									world,
-									componentName,
-									args[0] as DeepWritable<typeof args[0]>,
-									args[1] as DeepWritable<typeof args[1]>
-								);
-
-								if (payload !== None) {
-									notifySubscribers(
-										subscribers,
-										updateComponentEvent,
-										ref,
-										componentName,
-										//@ts-ignore
-										payload
-									);
-								}
-							} else if (componentEvent === "Created") {
-								notifySubscribers(
-									subscribers,
-									createComponentEvent,
-									ref,
-									componentName,
-									args[0] as DeepWritable<typeof args[0]>
-								);
-							} else if (componentEvent === "Removing") {
-								notifySubscribers(
-									subscribers,
-									removeComponentEvent,
-									ref,
-									componentName
-								);
-							}
-						})
+						world.onComponent(
+							componentName,
+							createReplicatedComponentCallback(componentName)
+						)
 					);
 				}
 			}

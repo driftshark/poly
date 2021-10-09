@@ -1,8 +1,11 @@
+import { t } from "@rbxts/t";
+import { ComponentEvent } from "Component";
 import {
 	GroupIdToEntity,
 	GroupIdToSubscribers,
 	ReplicatedComponents,
 } from "replication/cache";
+import { getPayload } from "replication/componentUpdatePayload";
 import {
 	BulkCreateEvent,
 	BulkCreateEventCallback,
@@ -11,6 +14,7 @@ import {
 	BulkType,
 	CreateEvent,
 	RemoveEvent,
+	UpdateEvent,
 } from "replication/events";
 import { named } from "util/symbol";
 import type { World } from "world";
@@ -25,9 +29,70 @@ export = <TReplicatedComponents extends ReplicatedComponents>(
 	replicatedComponents: TReplicatedComponents,
 	createComponentEvent: CreateEvent,
 	bulkCreateComponentEvent: BulkCreateEvent,
+	updateComponentEvent: UpdateEvent,
 	removeComponentEvent: RemoveEvent,
 	bulkRemoveComponentEvent: BulkRemoveEvent
 ) => {
+	const createReplicatedComponentCallback = <
+		TComponentName extends keyof Components
+	>(
+		componentName: TComponentName
+	) => {
+		return <
+			TComponentEvent extends keyof ComponentEvent<Components[TComponentName]>
+		>(
+			componentEvent: TComponentEvent,
+			ref: t.static<Components[TComponentName]["refValidator"]>,
+			...args: Parameters<
+				ComponentEvent<Components[TComponentName]>[TComponentEvent]
+			>
+		) => {
+			const groupId: string | undefined = world.getComponent(
+				ref,
+				"ReplicationGroup"
+			)?.[componentName];
+			if (groupId === undefined) return;
+
+			const subscribers = groupIdToSubscribers[groupId];
+			if (subscribers === undefined) return;
+
+			if (componentEvent === "Updated") {
+				const payload = getPayload(
+					world,
+					componentName,
+					args[0] as DeepWritable<typeof args[0]>,
+					args[1] as DeepWritable<typeof args[1]>
+				);
+
+				if (payload !== None) {
+					notifySubscribers(
+						subscribers,
+						updateComponentEvent,
+						ref,
+						componentName,
+						//@ts-ignore
+						payload
+					);
+				}
+			} else if (componentEvent === "Created") {
+				notifySubscribers(
+					subscribers,
+					createComponentEvent,
+					ref,
+					componentName,
+					args[0] as DeepWritable<typeof args[0]>
+				);
+			} else if (componentEvent === "Removing") {
+				notifySubscribers(
+					subscribers,
+					removeComponentEvent,
+					ref,
+					componentName
+				);
+			}
+		};
+	};
+
 	const getReplicableData = <
 		TComponentName extends keyof TReplicatedComponents
 	>(
@@ -365,6 +430,7 @@ export = <TReplicatedComponents extends ReplicatedComponents>(
 	};
 
 	return {
+		createReplicatedComponentCallback,
 		compileNewBatchData,
 		getReplicableData,
 		handleNewReplicationSubscription,
