@@ -22,3 +22,5 @@ declare function notifySubscribers<
 	eventInstance: TEvent,
 	...args: TParameters
 ): void;
+
+export = notifySubscribers;

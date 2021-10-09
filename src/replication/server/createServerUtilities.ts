@@ -18,7 +18,7 @@ import {
 } from "replication/events";
 import { named } from "util/symbol";
 import type { World } from "world";
-import { notifySubscribers } from "./notifySubscribers";
+import notifySubscribers from "./notifySubscribers";
 
 const None = named("None");
 
