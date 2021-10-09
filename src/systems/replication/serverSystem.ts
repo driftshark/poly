@@ -82,8 +82,7 @@ export = createSystem(() => {
 			)) {
 				if ("replicate" in componentDefinition) {
 					//@ts-ignore
-					replicatedComponents[componentName] =
-						componentDefinition["replicate"];
+					replicatedComponents[componentName] = componentDefinition.replicate;
 
 					disconnectFns.push(
 						world.onComponent(
