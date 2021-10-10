@@ -22,6 +22,15 @@ const exactReplicatedComponentObject = replicationMod(
 	ReplicationType.Exact
 );
 
+const diffReplicatedComponentObject = replicationMod(
+	defineComponent({
+		name: "DiffReplicatedComponentObject",
+		data: <{ among: string }>(<unknown>true),
+		refValidator: t.any,
+	}),
+	ReplicationType.Diff
+);
+
 const exactReplicatedComponentWithConsumer = replicationMod(
 	defineComponent({
 		name: "ExactReplicatedComponentWithConsumer",
@@ -76,6 +85,7 @@ const libworld = new World("test world");
 
 libworld.registerComponent(exactReplicatedComponent);
 libworld.registerComponent(exactReplicatedComponentObject);
+libworld.registerComponent(diffReplicatedComponentObject);
 libworld.registerComponent(exactReplicatedComponentWithConsumer);
 libworld.registerComponent(exactReplicatedComponentWithInteract);
 libworld.registerComponent(keyedReplicatedComponent);
