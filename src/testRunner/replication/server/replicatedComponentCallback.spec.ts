@@ -14,8 +14,8 @@ export = () => {
 
 	const TEST_REPLICATION_GROUP = "testGroup";
 
-	let fn = (...args: any[]) => {};
-	const mockEvent = mockRemote((...args: any[]) => {
+	let fn = (...args: unknown[]) => {};
+	const mockEvent = mockRemote((...args: unknown[]) => {
 		fn(...args);
 	});
 

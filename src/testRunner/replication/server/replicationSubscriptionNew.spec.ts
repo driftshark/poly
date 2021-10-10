@@ -7,16 +7,14 @@ import libworld, { libReplicatedComponents } from "../lib/libworld";
 import mockRemote from "../lib/mockRemote";
 
 export = () => {
-	const TEST_REF = "testRef";
-
 	const TEST_PLAYER = "testPlayer" as unknown as Player;
 	const TEST_PLAYER_2 = "testPlayer2" as unknown as Player;
 
 	const TEST_REPLICATION_GROUP = "testGroup";
 	const TEST_REPLICATION_GROUP_2 = "testGroup2";
 
-	let fn = (...args: any[]) => {};
-	const mockEvent = mockRemote((...args: any[]) => {
+	let fn = (...args: unknown[]) => {};
+	const mockEvent = mockRemote((...args: unknown[]) => {
 		fn(...args);
 	});
 
