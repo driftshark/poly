@@ -51,10 +51,10 @@ export = <TReplicatedComponents extends ReplicatedComponents>(
 				ref,
 				"ReplicationGroup"
 			)?.[componentName];
-			if (groupId === undefined) return;
+			if (groupId === undefined) return false;
 
 			const subscribers = groupIdToSubscribers[groupId];
-			if (subscribers === undefined) return;
+			if (subscribers === undefined) return false;
 
 			if (componentEvent === "Updated") {
 				const payload = getPayload(
