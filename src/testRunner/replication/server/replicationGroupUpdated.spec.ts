@@ -102,12 +102,6 @@ export = () => {
 		mockEvent
 	);
 
-	//if old subs, but no new subs, remove all for old subs
-	//if component doesn't exist for new, remove all for old subs
-	//if replicated data doesn't exist for new, remove all for old subs
-	//else, if new subscribers does not have old sub, then remove for that
-	//else, if old subs does not have new sub, then add for that
-
 	it("should create group ids", () => {
 		const oldReplicationGroupData = {};
 		const newReplicationGroupData = {
@@ -230,5 +224,30 @@ export = () => {
 		expect(count).to.equal(2);
 	});
 
-	it("should change group ids", () => {});
+	it("should not change anything", () => {
+		expect(deepEquals(entities, {})).to.equal(true);
+
+		handleUpdatedReplicationGroup(
+			TEST_REF,
+			{
+				//@ts-ignore
+				[COMPONENT_NO_CHANGE]: GROUP_NO_CHANGE,
+			},
+			{ [COMPONENT_NO_CHANGE]: GROUP_NO_CHANGE }
+		);
+
+		expect(deepEquals(entities, {})).to.equal(true);
+	});
+
+	it("should remove all for old subs when no new subs", () => {});
+
+	it("should not remove or create when subscriber is subscribed to both group ids", () => {});
+
+	it("should remove if old sub is not subbed to new", () => {});
+
+	it("should add if sub is not subbed to old", () => {});
+
+	it("should add all for new subs when no old subs", () => {});
+
+	it("should remove all for old subscribers when replicatedData is none", () => {});
 };
