@@ -293,6 +293,10 @@ export = <TReplicatedComponents extends ReplicatedComponents>(
 
 							if (arr.isEmpty()) {
 								groupIdToEntity[groupId]!.delete(ref);
+
+								if (groupIdToEntity[groupId]!.isEmpty()) {
+									groupIdToEntity[groupId] = undefined;
+								}
 							}
 						}
 					}
@@ -324,75 +328,49 @@ export = <TReplicatedComponents extends ReplicatedComponents>(
 				groupIdToEntity[groupId]!.get(ref)!.push(key);
 
 				const subscribers = groupIdToSubscribers[groupId];
-				if (
-					oldData[key] !== undefined &&
-					groupIdToSubscribers[oldData[key]!] !== undefined
-				) {
-					const subscribersToOldGroupId = groupIdToSubscribers[oldData[key]!]!;
+				const subscribersToOldGroupId =
+					oldData[key] !== undefined
+						? groupIdToSubscribers[oldData[key]!]
+						: undefined;
 
-					if (subscribers !== undefined) {
-						const data = world.getComponent(ref, key);
-						if (data !== undefined) {
-							//@ts-ignore
-							const replicatedData = getReplicableData(key, data);
+				if (subscribersToOldGroupId !== undefined) {
+					for (const [subscriber] of subscribersToOldGroupId) {
+						if (
+							subscribers === undefined ||
+							subscribers.get(subscriber) === undefined
+						) {
+							removeComponentEvent.FireClient(subscriber, ref, key);
+						}
+					}
+				}
 
-							if (replicatedData !== None) {
-								for (const [subscriber] of subscribersToOldGroupId) {
-									if (subscribers.get(subscriber) === undefined) {
-										removeComponentEvent.FireClient(subscriber, ref, key);
-									}
-								}
+				if (subscribers !== undefined) {
+					const data = world.getComponent(ref, key);
+					const replicatedData = //@ts-ignore
+						data !== undefined ? getReplicableData(key, data) : None;
 
-								for (const [subscriber] of subscribers) {
-									if (subscribersToOldGroupId.get(subscriber) === undefined) {
-										createComponentEvent.FireClient(
-											subscriber,
-											ref,
-											key, //@ts-ignore
-											replicatedData
-										);
-									}
-								}
-							} else {
-								notifySubscribers(
-									subscribersToOldGroupId,
-									removeComponentEvent,
+					if (replicatedData !== None) {
+						for (const [subscriber] of subscribers) {
+							if (
+								subscribersToOldGroupId === undefined ||
+								subscribersToOldGroupId.get(subscriber) === undefined
+							) {
+								createComponentEvent.FireClient(
+									subscriber,
 									ref,
-									key
+									key, //@ts-ignore
+									replicatedData
 								);
 							}
-						} else {
+						}
+					} else {
+						if (subscribersToOldGroupId !== undefined) {
 							notifySubscribers(
 								subscribersToOldGroupId,
 								removeComponentEvent,
 								ref,
 								key
 							);
-						}
-					} else {
-						notifySubscribers(
-							subscribersToOldGroupId,
-							removeComponentEvent,
-							ref,
-							key
-						);
-					}
-				} else {
-					if (subscribers !== undefined) {
-						const data = world.getComponent(ref, key);
-						if (data !== undefined) {
-							//@ts-ignore
-							const replicatedData = getReplicableData(key, data);
-
-							if (replicatedData !== None) {
-								notifySubscribers(
-									subscribers,
-									createComponentEvent,
-									ref,
-									key, //@ts-ignore
-									replicatedData
-								);
-							}
 						}
 					}
 				}
