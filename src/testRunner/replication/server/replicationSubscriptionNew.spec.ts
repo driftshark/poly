@@ -1,6 +1,6 @@
 /// <reference types="@rbxts/testez/globals" />
 
-import { GroupIdToSubscribers } from "replication/cache";
+import { GroupIdToEntity, GroupIdToSubscribers } from "replication/cache";
 import createServerUtilities from "replication/server/createServerUtilities";
 import { deepEquals } from "util/tableUtil";
 import libworld, { libReplicatedComponents } from "../lib/libworld";
@@ -19,10 +19,11 @@ export = () => {
 	});
 
 	const subscribers: GroupIdToSubscribers = {};
+	const entities: GroupIdToEntity = {};
 
 	const { handleNewReplicationSubscription } = createServerUtilities(
 		libworld,
-		{},
+		entities,
 		subscribers,
 		libReplicatedComponents,
 		mockEvent,
@@ -34,6 +35,8 @@ export = () => {
 
 	it("should replicate group ids, add to subscriber list, and replicate batch", () => {
 		subscribers[TEST_REPLICATION_GROUP_2] = new Map([[TEST_PLAYER_2, true]]);
+
+		entities[TEST_REPLICATION_GROUP] = new Map();
 
 		let count = 0;
 		fn = (ref, batchData) => {
@@ -57,6 +60,8 @@ export = () => {
 				]),
 			})
 		).to.equal(true);
-		expect(count).to.equal(2);
+
+		//test to make sure batch data is not sent if there is none
+		expect(count).to.equal(1);
 	});
 };

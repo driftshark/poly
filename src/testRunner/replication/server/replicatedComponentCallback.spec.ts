@@ -81,7 +81,7 @@ export = () => {
 			).to.equal(true);
 			expect(ref).to.equal(TEST_REF);
 			expect(componentName).to.equal("KeyedReplicatedComponent");
-			expect(deepEquals(payload, { among: "they" })).to.equal(true);
+			expect(deepEquals(payload, { among: "us" })).to.equal(true);
 		};
 
 		//None

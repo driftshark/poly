@@ -50,6 +50,15 @@ export = () => {
 		//@ts-ignore
 		libworld.addComponent(TEST_REF, "KeyedReplicatedComponent", initialData);
 
+		expect(
+			//@ts-ignore
+			deepEquals(libworld.getComponent(TEST_REF, "KeyedReplicatedComponent"), {
+				among: "s",
+				us: false,
+				obj: { among: "us" },
+			})
+		).to.equal(true);
+
 		let count = 0;
 		const disconnect = libworld.onComponentEvent(
 			//@ts-ignore
@@ -60,7 +69,6 @@ export = () => {
 				expect(ref).to.equal(TEST_REF);
 				expect(
 					deepEquals(data, {
-						among: "_N",
 						us: true,
 						obj: { us: true },
 					})
@@ -79,7 +87,6 @@ export = () => {
 		expect(
 			//@ts-ignore
 			deepEquals(libworld.getComponent(TEST_REF, "KeyedReplicatedComponent"), {
-				among: "_N",
 				us: true,
 				obj: { us: true },
 			})
