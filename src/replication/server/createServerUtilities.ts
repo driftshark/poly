@@ -245,7 +245,7 @@ export = <TReplicatedComponents extends ReplicatedComponents>(
 			//@ts-ignore
 			if (replicatedComponents[componentName] !== undefined) {
 				const componentGroupId = data[componentName];
-				if (componentGroupId) {
+				if (componentGroupId !== undefined) {
 					if (groupIdToEntity[componentGroupId] === undefined) {
 						groupIdToEntity[componentGroupId] = new Map();
 					}
