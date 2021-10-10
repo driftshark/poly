@@ -41,6 +41,17 @@ export = () => {
 		subscribers[TEST_REPLICATION_GROUP_2] = new Map([[TEST_PLAYER_2, true]]);
 		subscribers[TEST_REPLICATION_GROUP_3] = new Map([[TEST_PLAYER, true]]);
 
+		expect(
+			deepEquals(subscribers, {
+				[TEST_REPLICATION_GROUP]: new Map([
+					[TEST_PLAYER, true],
+					[TEST_PLAYER_2, true],
+				]),
+				[TEST_REPLICATION_GROUP_2]: new Map([[TEST_PLAYER_2, true]]),
+				[TEST_REPLICATION_GROUP_3]: new Map([[TEST_PLAYER, true]]),
+			})
+		).to.equal(true);
+
 		handleRemovingReplicationSubscription(
 			TEST_PLAYER,
 			new Map([
