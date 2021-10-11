@@ -6,8 +6,7 @@
 	"scripts": {
 		"prepare": "npx rbxtsc --verbose -p tsconfig.prod.json",
 		"dev": "concurrently \"rojo serve\" \"npx rbxtsc -w\"",
-		"build": "npx rbxtsc --verbose",
-		"test": "npm run build && rojo build -o place.rbxlx && run-in-roblox.exe --place place.rbxlx --script out/testRunner/init.server.lua"
+		"build": "npx rbxtsc --verbose"
 	},
 	"keywords": [],
 	"author": "suyoin",
