@@ -13,6 +13,7 @@ export = () => {
 	const TEST_REF_2 = "testRef2";
 
 	const TEST_PLAYER = "testPlayer" as unknown as Player;
+	const TEST_PLAYER_2 = "testPlayer2" as unknown as Player;
 
 	const OLD_SUB = "testOldSub";
 
@@ -42,23 +43,7 @@ export = () => {
 	const GROUP_NEW_NO_REPLICATED = "testNewNoReplicated";
 	const GROUP_NEW_NO_SUB = "testNewNoSub";
 	const GROUP_NO_CHANGE = "testNoChange";
-
-	const oldReplicationGroupData = {
-		[COMPONENT_NO_CHANGE]: GROUP_NO_CHANGE,
-
-		[COMPONENT_CHANGE_1]: OLD_SUB,
-		[COMPONENT_CHANGE_2]: OLD_SUB,
-		[COMPONENT_CHANGE_3]: OLD_SUB,
-		[COMPONENT_CHANGE_4]: OLD_SUB,
-	};
-	const newReplicationGroupData = {
-		[COMPONENT_NO_CHANGE]: GROUP_NO_CHANGE,
-
-		[COMPONENT_CHANGE_1]: GROUP_CHANGE_NO_NEW_SUB,
-		[COMPONENT_CHANGE_2]: GROUP_CHANGE_NO_COMP,
-		[COMPONENT_CHANGE_3]: GROUP_CHANGE_NO_REPLICATED,
-		[COMPONENT_CHANGE_4]: GROUP_CHANGE_SUCCESS,
-	};
+	const GROUP_SUB_BUT_NOT_TEST_PLAYER = "testNoTestPlayer";
 
 	let fn = (...args: unknown[]) => {};
 	const mockEvent = mockRemote((...args: unknown[]) => {
@@ -87,6 +72,7 @@ export = () => {
 		[GROUP_CHANGE_NO_COMP]: new Map([[TEST_PLAYER, true]]),
 		[GROUP_CHANGE_NO_REPLICATED]: new Map([[TEST_PLAYER, true]]),
 		[GROUP_CHANGE_SUCCESS]: new Map([[TEST_PLAYER, true]]),
+		[GROUP_SUB_BUT_NOT_TEST_PLAYER]: new Map([[TEST_PLAYER_2, true]]),
 	};
 	const entities: GroupIdToEntity = {};
 
@@ -239,11 +225,104 @@ export = () => {
 		expect(deepEquals(entities, {})).to.equal(true);
 	});
 
-	it("should remove all for old subs when no new subs", () => {});
+	it("should remove all for old subs when no new subs", () => {
+		const oldReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: OLD_SUB,
+		};
+
+		const newReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: GROUP_NEW_NO_SUB,
+		};
+
+		let removeCount = 0;
+		removeFn = (subscriber, ref, componentName) => {
+			removeCount += 1;
+
+			expect(subscriber).to.equal(TEST_PLAYER);
+			expect(ref).to.equal(TEST_REF);
+			expect(componentName).to.equal(COMPONENT_CHANGE_1);
+		};
+
+		let createCount = 0;
+		createFn = (subscriber, ref, key, replicatedData) => {
+			createCount += 1;
+		};
+
+		handleUpdatedReplicationGroup(
+			TEST_REF, //@ts-ignore
+			newReplicationGroupData,
+			oldReplicationGroupData
+		);
+
+		expect(
+			deepEquals(entities, {
+				[GROUP_NEW_NO_SUB]: new Map([[TEST_REF, [COMPONENT_CHANGE_1]]]),
+			})
+		).to.equal(true);
+		expect(removeCount).to.equal(1);
+		expect(createCount).to.equal(0);
+
+		for (const [i] of pairs(entities)) {
+			entities[i] = undefined;
+		}
+	});
+
+	it("should remove if old sub is not subbed to new", () => {
+		const oldReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: OLD_SUB,
+		};
+
+		const newReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: GROUP_SUB_BUT_NOT_TEST_PLAYER,
+		};
+
+		//@ts-ignore
+		libReplicatedComponents[COMPONENT_CHANGE_1] = ReplicationType.Exact;
+		//@ts-ignore
+		libworld.addComponent(TEST_REF, COMPONENT_CHANGE_1, true);
+
+		let removeCount = 0;
+		removeFn = (subscriber, ref, componentName) => {
+			removeCount += 1;
+
+			expect(subscriber).to.equal(TEST_PLAYER);
+			expect(ref).to.equal(TEST_REF);
+			expect(componentName).to.equal(COMPONENT_CHANGE_1);
+		};
+
+		let createCount = 0;
+		createFn = (subscriber, ref, key, replicatedData) => {
+			createCount += 1;
+
+			expect(subscriber).to.equal(TEST_PLAYER_2);
+			expect(ref).to.equal(TEST_REF);
+			expect(key).to.equal(COMPONENT_CHANGE_1);
+			expect(replicatedData).to.equal(true);
+		};
+
+		handleUpdatedReplicationGroup(
+			TEST_REF, //@ts-ignore
+			newReplicationGroupData,
+			oldReplicationGroupData
+		);
+
+		expect(
+			deepEquals(entities, {
+				[GROUP_SUB_BUT_NOT_TEST_PLAYER]: new Map([
+					[TEST_REF, [COMPONENT_CHANGE_1]],
+				]),
+			})
+		).to.equal(true);
+		expect(removeCount).to.equal(1);
+		expect(createCount).to.equal(1);
+
+		for (const [i] of pairs(entities)) {
+			entities[i] = undefined;
+		}
+		libworld.removeRef(TEST_REF);
+	});
 
 	it("should not remove or create when subscriber is subscribed to both group ids", () => {});
-
-	it("should remove if old sub is not subbed to new", () => {});
 
 	it("should add if sub is not subbed to old", () => {});
 
