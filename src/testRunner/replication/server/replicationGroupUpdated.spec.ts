@@ -16,6 +16,7 @@ export = () => {
 	const TEST_PLAYER_2 = "testPlayer2" as unknown as Player;
 
 	const OLD_SUB = "testOldSub";
+	const OLD_NO_SUB = "testOldNoSub";
 
 	const COMPONENT_NO_CHANGE = "nochang";
 	const COMPONENT_REMOVAL_1 = "removal1";
@@ -418,7 +419,56 @@ export = () => {
 		libworld.removeRef(TEST_REF);
 	});
 
-	it("should add if sub is not subbed to old", () => {});
+	it("should add if sub is not subbed to old", () => {
+		const oldReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: OLD_NO_SUB,
+		};
+
+		const newReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: GROUP_CHANGE_SUCCESS,
+		};
+
+		//@ts-ignore
+		libReplicatedComponents[COMPONENT_CHANGE_1] = {
+			among: ReplicationType.Exact,
+		};
+		//@ts-ignore
+		libworld.addComponent(TEST_REF, COMPONENT_CHANGE_1, { among: true });
+
+		let removeCount = 0;
+		removeFn = (subscriber, ref, componentName) => {
+			removeCount += 1;
+		};
+
+		let createCount = 0;
+		createFn = (subscriber, ref, key, replicatedData) => {
+			createCount += 1;
+
+			expect(subscriber).to.equal(TEST_PLAYER);
+			expect(ref).to.equal(TEST_REF);
+			expect(key).to.equal(COMPONENT_CHANGE_1);
+			expect(deepEquals(replicatedData, { among: true })).to.equal(true);
+		};
+
+		handleUpdatedReplicationGroup(
+			TEST_REF, //@ts-ignore
+			newReplicationGroupData,
+			oldReplicationGroupData
+		);
+
+		expect(
+			deepEquals(entities, {
+				[GROUP_CHANGE_SUCCESS]: new Map([[TEST_REF, [COMPONENT_CHANGE_1]]]),
+			})
+		).to.equal(true);
+		expect(removeCount).to.equal(0);
+		expect(createCount).to.equal(1);
+
+		for (const [i] of pairs(entities)) {
+			entities[i] = undefined;
+		}
+		libworld.removeRef(TEST_REF);
+	});
 
 	it("should add all for new subs when no old subs", () => {});
 };
