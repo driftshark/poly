@@ -17,6 +17,7 @@ export = () => {
 
 	const OLD_SUB = "testOldSub";
 	const OLD_NO_SUB = "testOldNoSub";
+	const OLD_ACTUALLY_NO_SUB = "testOldNoSubActually";
 
 	const COMPONENT_NO_CHANGE = "nochang";
 	const COMPONENT_REMOVAL_1 = "removal1";
@@ -28,14 +29,10 @@ export = () => {
 	const COMPONENT_NEW_4 = "NEW4";
 
 	const COMPONENT_CHANGE_1 = "CHANGE1";
-	const COMPONENT_CHANGE_2 = "CHANGE2";
-	const COMPONENT_CHANGE_3 = "CHANGE3";
-	const COMPONENT_CHANGE_4 = "CHANGE4";
 
 	const GROUP_REMOVE_EXISTING_ARRAY = "testRemoveExisting";
 	const GROUP_REMOVE_EXISTING_MAP = "testRemoveEmptyArr";
 	const GROUP_REMOVE_EMPTY_MAP = "testRemoveEmptyMap";
-	const GROUP_CHANGE_NO_NEW_SUB = "testChangeNoNewSub";
 	const GROUP_CHANGE_NO_COMP = "testChangeNoComp";
 	const GROUP_CHANGE_NO_REPLICATED = "testChangeNoReplicated";
 	const GROUP_CHANGE_SUCCESS = "testChangeSuccess";
@@ -64,6 +61,7 @@ export = () => {
 	const subscribers: GroupIdToSubscribers = {
 		[GROUP_NO_CHANGE]: new Map([[TEST_PLAYER, true]]),
 		[OLD_SUB]: new Map([[TEST_PLAYER, true]]),
+		[OLD_NO_SUB]: new Map([[TEST_PLAYER_2, true]]),
 		[GROUP_REMOVE_EXISTING_MAP]: new Map([[TEST_PLAYER, true]]),
 		[GROUP_REMOVE_EMPTY_MAP]: new Map([[TEST_PLAYER, true]]),
 		[GROUP_NEW]: new Map([[TEST_PLAYER, true]]),
@@ -438,6 +436,61 @@ export = () => {
 		let removeCount = 0;
 		removeFn = (subscriber, ref, componentName) => {
 			removeCount += 1;
+
+			expect(subscriber).to.equal(TEST_PLAYER_2);
+			expect(ref).to.equal(TEST_REF);
+			expect(componentName).to.equal(COMPONENT_CHANGE_1);
+		};
+
+		let createCount = 0;
+		createFn = (subscriber, ref, key, replicatedData) => {
+			createCount += 1;
+
+			expect(subscriber).to.equal(TEST_PLAYER);
+			expect(ref).to.equal(TEST_REF);
+			expect(key).to.equal(COMPONENT_CHANGE_1);
+			expect(deepEquals(replicatedData, { among: true })).to.equal(true);
+		};
+
+		handleUpdatedReplicationGroup(
+			TEST_REF, //@ts-ignore
+			newReplicationGroupData,
+			oldReplicationGroupData
+		);
+
+		expect(
+			deepEquals(entities, {
+				[GROUP_CHANGE_SUCCESS]: new Map([[TEST_REF, [COMPONENT_CHANGE_1]]]),
+			})
+		).to.equal(true);
+		expect(removeCount).to.equal(1);
+		expect(createCount).to.equal(1);
+
+		for (const [i] of pairs(entities)) {
+			entities[i] = undefined;
+		}
+		libworld.removeRef(TEST_REF);
+	});
+
+	it("should add all for new subs when no old subs", () => {
+		const oldReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: OLD_ACTUALLY_NO_SUB,
+		};
+
+		const newReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: GROUP_CHANGE_SUCCESS,
+		};
+
+		//@ts-ignore
+		libReplicatedComponents[COMPONENT_CHANGE_1] = {
+			among: ReplicationType.Exact,
+		};
+		//@ts-ignore
+		libworld.addComponent(TEST_REF, COMPONENT_CHANGE_1, { among: true });
+
+		let removeCount = 0;
+		removeFn = (subscriber, ref, componentName) => {
+			removeCount += 1;
 		};
 
 		let createCount = 0;
@@ -469,6 +522,4 @@ export = () => {
 		}
 		libworld.removeRef(TEST_REF);
 	});
-
-	it("should add all for new subs when no old subs", () => {});
 };
