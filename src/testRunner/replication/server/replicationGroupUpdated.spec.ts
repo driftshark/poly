@@ -322,11 +322,59 @@ export = () => {
 		libworld.removeRef(TEST_REF);
 	});
 
+	it("should remove all for old subscribers when replicatedData is none", () => {
+		const oldReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: OLD_SUB,
+		};
+
+		const newReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: GROUP_CHANGE_SUCCESS,
+		};
+
+		//@ts-ignore
+		libReplicatedComponents[COMPONENT_CHANGE_1] = {
+			among: ReplicationType.Exact,
+		};
+		//@ts-ignore
+		libworld.addComponent(TEST_REF, COMPONENT_CHANGE_1, { us: true });
+
+		let removeCount = 0;
+		removeFn = (subscriber, ref, componentName) => {
+			removeCount += 1;
+
+			expect(subscriber).to.equal(TEST_PLAYER);
+			expect(ref).to.equal(TEST_REF);
+			expect(componentName).to.equal(COMPONENT_CHANGE_1);
+		};
+
+		let createCount = 0;
+		createFn = (subscriber, ref, key, replicatedData) => {
+			createCount += 1;
+		};
+
+		handleUpdatedReplicationGroup(
+			TEST_REF, //@ts-ignore
+			newReplicationGroupData,
+			oldReplicationGroupData
+		);
+
+		expect(
+			deepEquals(entities, {
+				[GROUP_CHANGE_SUCCESS]: new Map([[TEST_REF, [COMPONENT_CHANGE_1]]]),
+			})
+		).to.equal(true);
+		expect(removeCount).to.equal(1);
+		expect(createCount).to.equal(0);
+
+		for (const [i] of pairs(entities)) {
+			entities[i] = undefined;
+		}
+		libworld.removeRef(TEST_REF);
+	});
+
 	it("should not remove or create when subscriber is subscribed to both group ids", () => {});
 
 	it("should add if sub is not subbed to old", () => {});
 
 	it("should add all for new subs when no old subs", () => {});
-
-	it("should remove all for old subscribers when replicatedData is none", () => {});
 };
