@@ -372,7 +372,51 @@ export = () => {
 		libworld.removeRef(TEST_REF);
 	});
 
-	it("should not remove or create when subscriber is subscribed to both group ids", () => {});
+	it("should not remove or create when subscriber is subscribed to both group ids", () => {
+		const oldReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: OLD_SUB,
+		};
+
+		const newReplicationGroupData = {
+			[COMPONENT_CHANGE_1]: GROUP_CHANGE_SUCCESS,
+		};
+
+		//@ts-ignore
+		libReplicatedComponents[COMPONENT_CHANGE_1] = {
+			among: ReplicationType.Exact,
+		};
+		//@ts-ignore
+		libworld.addComponent(TEST_REF, COMPONENT_CHANGE_1, { among: true });
+
+		let removeCount = 0;
+		removeFn = (subscriber, ref, componentName) => {
+			removeCount += 1;
+		};
+
+		let createCount = 0;
+		createFn = (subscriber, ref, key, replicatedData) => {
+			createCount += 1;
+		};
+
+		handleUpdatedReplicationGroup(
+			TEST_REF, //@ts-ignore
+			newReplicationGroupData,
+			oldReplicationGroupData
+		);
+
+		expect(
+			deepEquals(entities, {
+				[GROUP_CHANGE_SUCCESS]: new Map([[TEST_REF, [COMPONENT_CHANGE_1]]]),
+			})
+		).to.equal(true);
+		expect(removeCount).to.equal(0);
+		expect(createCount).to.equal(0);
+
+		for (const [i] of pairs(entities)) {
+			entities[i] = undefined;
+		}
+		libworld.removeRef(TEST_REF);
+	});
 
 	it("should add if sub is not subbed to old", () => {});
 
