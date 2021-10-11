@@ -486,7 +486,10 @@ export = () => {
 			among: ReplicationType.Exact,
 		};
 		//@ts-ignore
-		libworld.addComponent(TEST_REF, COMPONENT_CHANGE_1, { among: true });
+		libworld.addComponent(TEST_REF, COMPONENT_CHANGE_1, {
+			among: true,
+			us: "111",
+		});
 
 		let removeCount = 0;
 		removeFn = (subscriber, ref, componentName) => {
