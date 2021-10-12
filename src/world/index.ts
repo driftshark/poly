@@ -76,6 +76,12 @@ export class World {
 				}
 			});
 		}
+
+		if (RunService.IsStudio()) {
+			this.registerSystems([
+				script.Parent!.WaitForChild("systems").WaitForChild("hot"),
+			]);
+		}
 	}
 
 	public fireEvent = fireEvent;
@@ -277,6 +283,15 @@ export class World {
 			uuid ?? HttpService.GenerateGUID(false),
 			callback
 		);
+	}
+
+	/** Include the given built-in systems */
+	public includeSystems(systems: ("entityWatcher" | "replication")[]): void {
+		for (const systemName of systems) {
+			this.registerSystems([
+				script.Parent!.WaitForChild("systems").WaitForChild(systemName),
+			]);
+		}
 	}
 
 	public registerComponent(componentDefinition: ComponentDefinition): void {
