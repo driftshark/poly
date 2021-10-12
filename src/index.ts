@@ -1,3 +1,4 @@
+export { ComponentDefinition } from "./Component";
 export * from "./defineComponent";
 export { default as defineComponent } from "./defineComponent";
 export { default as createSystem } from "./createSystem";
