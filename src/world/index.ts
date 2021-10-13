@@ -4,6 +4,9 @@ import symbol from "../util/symbol";
 import { System, UpdateSystem } from "System";
 import addToConnections from "world/addToConnections";
 import fireEvent from "./fireEvent";
+import OldComponent from "components/old";
+import ReplicationGroupComponent from "components/replicationGroup";
+import ReplicationSubscriptionComponent from "components/replicationSubscription";
 
 const HttpService = game.GetService("HttpService");
 const RunService = game.GetService("RunService");
@@ -82,6 +85,10 @@ export class World {
 				script.Parent!.WaitForChild("systems").WaitForChild("hot"),
 			]);
 		}
+
+		this.registerComponent(OldComponent);
+		this.registerComponent(ReplicationGroupComponent);
+		this.registerComponent(ReplicationSubscriptionComponent);
 	}
 
 	public fireEvent = fireEvent;
