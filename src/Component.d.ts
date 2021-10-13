@@ -1,5 +1,9 @@
 import { t } from "@rbxts/t";
 
+import OldComponent from "components/old";
+import ReplicationGroupComponent from "components/replicationGroup";
+import ReplicationSubscriptionComponent from "components/replicationSubscription";
+
 declare global {
 	interface Components {}
 }
