@@ -1,8 +1,8 @@
 /// <reference types="@rbxts/testez/globals" />
 
-import { named } from "../../util/symbol";
+import { named } from "@driftshark/symbol";
 import addToConnections from "../../world/addToConnections";
-import { deepEquals } from "../../util/tableUtil";
+import { deepEquals } from "@driftshark/table";
 
 export = () => {
 	it("should add connection to empty events table", () => {

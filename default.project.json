@@ -15,7 +15,10 @@
 				"$path": "include",
 				"node_modules": {
 					"$className": "Folder",
-					"$path": "node_modules/@rbxts"
+					"$path": "node_modules/@rbxts",
+					"@driftshark": {
+						"$path": "node_modules/@driftshark"
+					}
 				}
 			},
 			"poly": { "$path": "out" }

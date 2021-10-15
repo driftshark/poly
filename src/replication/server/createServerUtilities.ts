@@ -16,7 +16,7 @@ import {
 	RemoveEvent,
 	UpdateEvent,
 } from "replication/events";
-import { named } from "util/symbol";
+import { named } from "@driftshark/symbol";
 import type { World } from "world";
 import notifySubscribers from "./notifySubscribers";
 

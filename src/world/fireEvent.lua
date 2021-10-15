@@ -1,4 +1,5 @@
-local symbol = require(script.Parent.Parent.util.symbol)
+local TS = _G[script]
+local symbol = TS.import(script, TS.getModule(script, "@driftshark", "symbol").out)
 local BASE_SYMBOL = symbol.named("base")
 
 return function(self, ref, componentName, eventName, ...)

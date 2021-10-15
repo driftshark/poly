@@ -1,6 +1,6 @@
 import { t } from "@rbxts/t";
-import { named } from "util/symbol";
-import { merge } from "util/tableUtil";
+import { named } from "@driftshark/symbol";
+import { merge } from "@driftshark/table";
 import { World } from "world";
 
 /** Component with layers that reduce into pure data

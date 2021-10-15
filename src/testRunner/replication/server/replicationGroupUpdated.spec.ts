@@ -4,7 +4,7 @@ import { ReplicationType } from "replication";
 import { GroupIdToEntity, GroupIdToSubscribers } from "replication/cache";
 import { BulkType } from "replication/events";
 import createServerUtilities from "replication/server/createServerUtilities";
-import { deepEquals } from "util/tableUtil";
+import { deepEquals } from "@driftshark/table";
 import libworld, { libReplicatedComponents } from "../lib/libworld";
 import mockRemote from "../lib/mockRemote";
 

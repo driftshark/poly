@@ -1,7 +1,8 @@
 /// <reference types="@rbxts/testez/globals" />
 
-import { symbol, World } from "index";
-import { deepEquals } from "util/tableUtil";
+import { World } from "index";
+import { deepEquals } from "@driftshark/table";
+import { named } from "@driftshark/symbol";
 
 export = () => {
 	let count = 0;
@@ -20,7 +21,7 @@ export = () => {
 		expect(
 			deepEquals(world["events"], {
 				ReplicationGroup: {
-					[symbol.named("base")]: { uuid: fn },
+					[named("base")]: { uuid: fn },
 				},
 			})
 		).to.equal(true);

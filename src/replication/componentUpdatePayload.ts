@@ -1,7 +1,7 @@
 import { World } from "index";
 import { ReplicationType } from "replication";
-import { named } from "util/symbol";
-import { diff, patch, shallow } from "util/tableUtil";
+import { named } from "@driftshark/symbol";
+import { diff, patch, shallow } from "@driftshark/table";
 
 export const getPayload = <
 	TComponentName extends keyof Components,

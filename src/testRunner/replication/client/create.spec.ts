@@ -1,7 +1,7 @@
 /// <reference types="@rbxts/testez/globals" />
 
 import createClientUtilities from "replication/client/createClientUtilities";
-import { deepEquals } from "util/tableUtil";
+import { deepEquals } from "@driftshark/table";
 import libworld from "../lib/libworld";
 
 export = () => {

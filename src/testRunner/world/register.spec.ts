@@ -3,7 +3,7 @@
 import { t } from "@rbxts/t";
 import defineComponent from "defineComponent";
 import { World } from "index";
-import { deepEquals } from "util/tableUtil";
+import { deepEquals } from "@driftshark/table";
 
 export = () => {
 	const world = new World("world");

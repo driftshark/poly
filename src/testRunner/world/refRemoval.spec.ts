@@ -1,8 +1,8 @@
 /// <reference types="@rbxts/testez/globals" />
 
 import { World } from "index";
-import { named } from "util/symbol";
-import { deepEquals } from "util/tableUtil";
+import { named } from "@driftshark/symbol";
+import { deepEquals } from "@driftshark/table";
 
 export = () => {
 	const world = new World("world");

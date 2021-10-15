@@ -1,6 +1,6 @@
 import createSystem from "createSystem";
 import createClientUtilities from "replication/client/createClientUtilities";
-import promiseChild from "util/promiseChild";
+import promiseChild from "@driftshark/promise-child";
 import {
 	BulkCreateEvent,
 	BulkRemoveEvent,

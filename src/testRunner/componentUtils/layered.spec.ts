@@ -1,7 +1,7 @@
 /// <reference types="@rbxts/testez/globals" />
 
 import { addLayeredComponent, World } from "index";
-import { deepEquals } from "util/tableUtil";
+import { deepEquals } from "@driftshark/table";
 
 export = () => {
 	const world = new World("world");

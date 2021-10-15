@@ -1,6 +1,6 @@
 import { t } from "@rbxts/t";
 import { ComponentDefinition, ComponentEvent } from "Component";
-import symbol from "../util/symbol";
+import { named } from "@driftshark/symbol";
 import { System, UpdateSystem } from "System";
 import addToConnections from "world/addToConnections";
 import fireEvent from "./fireEvent";
@@ -11,7 +11,7 @@ import ReplicationSubscriptionComponent from "components/replicationSubscription
 const HttpService = game.GetService("HttpService");
 const RunService = game.GetService("RunService");
 
-const BASE_SYMBOL = symbol.named("base");
+const BASE_SYMBOL = named("base");
 
 export interface ConnectionTypes<TDefinition extends ComponentDefinition> {
 	BaseConnections: {

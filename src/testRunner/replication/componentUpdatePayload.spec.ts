@@ -5,8 +5,8 @@ import defineComponent from "defineComponent";
 import { replicationMod, World } from "index";
 import { ReplicationType } from "replication";
 import { getPayload, patchPayload } from "replication/componentUpdatePayload";
-import { deepEquals } from "util/tableUtil";
-import { named } from "../../util/symbol";
+import { deepEquals } from "@driftshark/table";
+import { named } from "@driftshark/symbol";
 
 export = () => {
 	const world = new World("world");
