@@ -13,9 +13,11 @@ type DeepWritable<T> = T extends ReadonlyMap<infer K, infer V>
 	: T extends ReadonlyArray<infer E>
 	? Array<DeepWritable<E>>
 	: T extends object
-	? {
-			-readonly [P in keyof T]: DeepWritable<T[P]>;
-	  }
+	? keyof T extends never
+		? T
+		: {
+				-readonly [P in keyof T]: DeepWritable<T[P]>;
+		  }
 	: T;
 
 type DisconnectFunction = () => void;
