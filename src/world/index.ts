@@ -7,6 +7,7 @@ import fireEvent from "./fireEvent";
 import OldComponent from "components/old";
 import ReplicationGroupComponent from "components/replicationGroup";
 import ReplicationSubscriptionComponent from "components/replicationSubscription";
+import { DeepReadonly, DisconnectFunction, Ref } from "util";
 
 const HttpService = game.GetService("HttpService");
 const RunService = game.GetService("RunService");

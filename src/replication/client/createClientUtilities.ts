@@ -8,6 +8,7 @@ import {
 	RemoveEvent,
 	UpdateEvent,
 } from "replication/events";
+import { DeepReadonly, DeepWritable, Ref } from "util";
 import type { World } from "world";
 
 type CallbackOf<T extends RemoteEvent> = T extends RemoteEvent<infer C>

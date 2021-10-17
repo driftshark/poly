@@ -19,6 +19,7 @@ import {
 import { named } from "@driftshark/symbol";
 import type { World } from "world";
 import notifySubscribers from "./notifySubscribers";
+import { DeepReadonly, DeepWritable, Ref } from "util";
 
 const None = named("None");
 

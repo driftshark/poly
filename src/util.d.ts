@@ -1,4 +1,4 @@
-type DeepReadonly<T> = T extends Map<infer K, infer V>
+export type DeepReadonly<T> = T extends Map<infer K, infer V>
 	? ReadonlyMap<K, DeepReadonly<V>>
 	: T extends Array<infer E>
 	? ReadonlyArray<DeepReadonly<E>>
@@ -8,7 +8,7 @@ type DeepReadonly<T> = T extends Map<infer K, infer V>
 	  }
 	: T;
 
-type DeepWritable<T> = T extends ReadonlyMap<infer K, infer V>
+export type DeepWritable<T> = T extends ReadonlyMap<infer K, infer V>
 	? Map<K, DeepWritable<V>>
 	: T extends ReadonlyArray<infer E>
 	? Array<DeepWritable<E>>
@@ -20,5 +20,5 @@ type DeepWritable<T> = T extends ReadonlyMap<infer K, infer V>
 		  }
 	: T;
 
-type DisconnectFunction = () => void;
-type Ref = any;
+export type DisconnectFunction = () => void;
+export type Ref = any;
