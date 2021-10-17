@@ -1,5 +1,5 @@
 import { t } from "@rbxts/t";
-import { DeepReadonly } from "util";
+import { DeepReadonly } from "./util";
 
 import OldComponent from "./components/old";
 import ReplicationGroupComponent from "./components/replicationGroup";

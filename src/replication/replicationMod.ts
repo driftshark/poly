@@ -1,7 +1,7 @@
 import { ComponentDefinition } from "Component";
 import { World } from "index";
 import { ReplicationType } from "replication";
-import { Ref } from "util";
+import { Ref } from "../util";
 
 /** Add replication to the definition
  *

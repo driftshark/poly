@@ -1,6 +1,6 @@
 import type { ComponentEvent } from "../Component";
 import type { ConnectionTypes, World } from ".";
-import { Ref } from "util";
+import { Ref } from "../util";
 
 declare function addToConnections<TComponentName extends keyof Components>(
 	events: World["events"],

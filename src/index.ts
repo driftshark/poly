@@ -18,7 +18,7 @@ export { replicationMod };
 export * from "./componentUtils/layered";
 export * from "./componentUtils/mapped";
 
-export { Ref } from "util";
+export { Ref } from "./util";
 type RefOf<TComponentName extends keyof Components> = t.static<
 	Components[TComponentName]["refValidator"]
 >;

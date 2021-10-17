@@ -1,5 +1,5 @@
 import { ReplicationType } from "replication";
-import { Ref } from "util";
+import { Ref } from "../util";
 
 type GroupIdToEntity = { [key in string]?: Map<Ref, (keyof Components)[]> };
 type GroupIdToSubscribers = { [key in string]?: Map<Player, true> };

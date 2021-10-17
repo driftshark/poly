@@ -14,7 +14,7 @@ import {
 	ReplicatedComponents,
 } from "../../replication/cache";
 import createServerUtilities from "replication/server/createServerUtilities";
-import { DisconnectFunction } from "util";
+import { DisconnectFunction } from "../../util";
 
 export = createSystem(() => {
 	let groupIdToEntity: GroupIdToEntity = {};
