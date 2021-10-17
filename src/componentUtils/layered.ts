@@ -22,7 +22,7 @@ import { DeepReadonly } from "../util";
  */
 export const addLayeredComponent = <
 	TRef extends t.static<Components[TComponentName]["refValidator"]>,
-	TComponentName extends keyof ExtractMembers<
+	TComponentName extends ExtractKeys<
 		Components,
 		{ data: LayeredComponentData<unknown> }
 	>,

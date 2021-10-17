@@ -15,7 +15,7 @@ import { World } from "world";
  */
 export const addMappedComponent = <
 	TRef extends t.static<Components[TComponentName]["refValidator"]>,
-	TComponentName extends keyof ExtractMembers<
+	TComponentName extends ExtractKeys<
 		Components,
 		{
 			data:
