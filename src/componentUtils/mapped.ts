@@ -17,7 +17,13 @@ export const addMappedComponent = <
 	TRef extends t.static<Components[TComponentName]["refValidator"]>,
 	TComponentName extends keyof ExtractMembers<
 		Components,
-		{ data: MappedComponentData<unknown> }
+		{
+			data:
+				| MappedComponentData<unknown>
+				| {
+						[key in any]?: unknown;
+				  };
+		}
 	>,
 	TKey extends keyof Components[TComponentName]["data"]
 >(
@@ -40,8 +46,7 @@ export const addMappedComponent = <
 	return data;
 };
 
-export type MappedComponentData<T, TKey = void> =
-	| {
-			[key in any]?: T;
-	  }
-	| Map<TKey extends void ? any : TKey, T>;
+export type MappedComponentData<T, TKey = void> = Map<
+	TKey extends void ? any : TKey,
+	T
+>;
