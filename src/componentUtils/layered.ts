@@ -34,11 +34,13 @@ export const addLayeredComponent = <
 	ref: TRef,
 	componentName: TComponentName,
 	layerName: string,
-	value: TData extends LayeredComponentData<infer T, infer LayerT>
-		? LayerT extends defined
-			? LayerT
-			: T
-		: never,
+	value:
+		| (TData extends LayeredComponentData<infer T, infer LayerT>
+				? LayerT extends defined
+					? LayerT
+					: T
+				: never)
+		| undefined,
 	reducer: (layers: DeepReadonly<TData["layers"]>) => TData["reduced"]
 ) => {
 	let existingComponent = world.getComponent(ref, componentName) as
