@@ -1,6 +1,6 @@
 {
 	"name": "@driftshark/poly",
-	"version": "1.2.14",
+	"version": "1.2.15",
 	"description": "",
 	"main": "out/init.lua",
 	"scripts": {
@@ -36,7 +36,7 @@
 	"dependencies": {
 		"@driftshark/promise-child": "^1.0.2",
 		"@driftshark/symbol": "^1.0.2",
-		"@driftshark/table": "^1.0.2",
+		"@driftshark/table": "^1.0.3",
 		"@rbxts/t": "^2.1.5"
 	}
 }
