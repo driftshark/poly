@@ -25,13 +25,24 @@ export const addMappedComponent = <
 				  };
 		}
 	>,
-	TKey extends keyof Components[TComponentName]["data"]
+	TKey extends Components[TComponentName]["data"] extends ReadonlyMap<
+		infer K,
+		infer _V
+	>
+		? K
+		: keyof Components[TComponentName]["data"],
+	TValue extends Components[TComponentName]["data"] extends ReadonlyMap<
+		infer _K,
+		infer V
+	>
+		? V
+		: Components[TComponentName]["data"][keyof Components[TComponentName]["data"]]
 >(
 	world: World,
 	ref: TRef,
 	componentName: TComponentName,
 	key: TKey,
-	value: Components[TComponentName]["data"][TKey] | undefined
+	value: TValue | undefined
 ) => {
 	let existingComponent = world.getComponent(ref, componentName);
 	if (existingComponent === undefined) {
@@ -39,7 +50,7 @@ export const addMappedComponent = <
 	}
 
 	const data = merge(existingComponent!, {
-		[key]: value ?? named("None"),
+		[key as any]: value ?? named("None"),
 	});
 
 	world.addComponent(ref, componentName, data);
