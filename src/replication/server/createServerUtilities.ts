@@ -19,7 +19,8 @@ import {
 import { named } from "@driftshark/symbol";
 import type { World } from "world";
 import notifySubscribers from "./notifySubscribers";
-import { DeepReadonly, DeepWritable, Ref } from "../../util";
+import { Ref } from "../../util";
+import { DeepReadonly, DeepWritable } from "@driftshark/table";
 
 const None = named("None");
 
@@ -48,10 +49,14 @@ export = <TReplicatedComponents extends ReplicatedComponents>(
 				ComponentEvent<Components[TComponentName]>[TComponentEvent]
 			>
 		) => {
-			const groupId: string | undefined = world.getComponent(
+			const replicationGroupComponent = world.getComponent(
 				ref,
 				"ReplicationGroup"
-			)?.[componentName];
+			);
+			const groupId: string | undefined =
+				replicationGroupComponent !== undefined
+					? replicationGroupComponent[componentName]
+					: undefined;
 			if (groupId === undefined) return false;
 
 			const subscribers = groupIdToSubscribers[groupId];

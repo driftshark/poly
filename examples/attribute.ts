@@ -1,3 +1,4 @@
+import { DeepReadonly } from "@driftshark/table";
 import { t } from "@rbxts/t";
 import {
 	addLayeredComponent,

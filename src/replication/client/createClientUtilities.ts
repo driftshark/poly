@@ -8,8 +8,9 @@ import {
 	RemoveEvent,
 	UpdateEvent,
 } from "replication/events";
-import { DeepReadonly, DeepWritable, Ref } from "../../util";
+import { Ref } from "../../util";
 import type { World } from "world";
+import { DeepReadonly, DeepWritable } from "@driftshark/table";
 
 type CallbackOf<T extends RemoteEvent> = T extends RemoteEvent<infer C>
 	? C

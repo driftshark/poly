@@ -1,8 +1,7 @@
 import { t } from "@rbxts/t";
 import { named } from "@driftshark/symbol";
-import { merge } from "@driftshark/table";
+import { DeepReadonly, merge } from "@driftshark/table";
 import { World } from "world";
-import { DeepReadonly } from "../util";
 
 /** Component with layers that reduce into pure data
  *
