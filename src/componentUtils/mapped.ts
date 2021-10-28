@@ -19,7 +19,7 @@ export const addMappedComponent = <
 		Components,
 		{
 			data:
-				| MappedComponentData<unknown>
+				| MappedComponentData<unknown, unknown>
 				| {
 						[key in any]?: unknown;
 				  };
@@ -57,7 +57,4 @@ export const addMappedComponent = <
 	return data;
 };
 
-export type MappedComponentData<T, TKey = void> = Map<
-	TKey extends void ? any : TKey,
-	T
->;
+export type MappedComponentData<TKey, T> = Map<TKey, T>;
