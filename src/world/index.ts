@@ -20,7 +20,7 @@ export interface ConnectionTypes<TDefinition extends ComponentDefinition> {
 		[symbolKey in symbol]: {
 			[key: string]: <TEvent extends keyof ComponentEvent<TDefinition>>(
 				componentEvent: TEvent,
-				ref: Ref,
+				ref: t.static<TDefinition["refValidator"]>,
 				...args: Parameters<ComponentEvent<TDefinition>[TEvent]>
 			) => void;
 		};
@@ -28,7 +28,7 @@ export interface ConnectionTypes<TDefinition extends ComponentDefinition> {
 	EventConnections: {
 		[eventKey in keyof ComponentEvent<TDefinition>]?: {
 			[key: string]: (
-				ref: Ref,
+				ref: t.static<TDefinition["refValidator"]>,
 				...args: Parameters<ComponentEvent<TDefinition>[eventKey]>
 			) => void;
 		};
