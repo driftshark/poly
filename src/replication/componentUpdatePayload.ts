@@ -45,7 +45,7 @@ export const getPayload = <
 				}
 				payload.set(
 					key,
-					diff(oldToDiff, newValue[key as TKey] as unknown as object)
+					diff(oldToDiff as object, newValue[key as TKey] as unknown as object)
 				);
 			} else {
 				if (newValue[key as TKey] === undefined) {
