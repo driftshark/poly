@@ -30,13 +30,13 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-roblox-ts": "^0.0.31",
 		"prettier": "^2.4.1",
-		"roblox-ts": "^1.2.5",
+		"roblox-ts": "^1.2.8",
 		"typescript": "^4.4.4"
 	},
 	"dependencies": {
-		"@driftshark/promise-child": "^1.0.3",
-		"@driftshark/symbol": "^1.0.3",
-		"@driftshark/table": "^1.0.6",
+		"@driftshark/promise-child": "^1.0.4",
+		"@driftshark/symbol": "^1.0.4",
+		"@driftshark/table": "^1.0.7",
 		"@rbxts/t": "^2.1.5"
 	}
 }
