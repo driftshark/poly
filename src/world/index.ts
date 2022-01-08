@@ -311,7 +311,10 @@ export class World {
 
 	public registerSystems(inSystems: (Instance | System)[], isHot?: true): void {
 		for (const v of inSystems) {
-			if (typeIs(v, "Instance") ? v.IsA("ModuleScript") : typeIs(v, "table")) {
+			if (
+				(typeIs(v, "Instance") && v.IsA("ModuleScript")) ||
+				typeIs(v, "table")
+			) {
 				let system: System;
 				if (typeIs(v, "Instance")) {
 					system = (
