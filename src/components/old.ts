@@ -1,5 +1,5 @@
 import { t } from "@rbxts/t";
-import { defineComponent } from "../../src";
+import defineComponent from "../../src/defineComponent";
 
 const definition = defineComponent({
 	name: "Old",

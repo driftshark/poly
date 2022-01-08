@@ -13,7 +13,7 @@ additionally, if only one definition is in Components, TypeScript will compile t
 
 import { t } from "@rbxts/t";
 import { LayeredComponentData } from "componentUtils/layered";
-import { defineComponent } from "../../src";
+import defineComponent from "../../src/defineComponent";
 
 const layeredPlaceholderDefinition = defineComponent({
 	name: "_lp",
