@@ -9,6 +9,7 @@ import ReplicationGroupComponent from "components/replicationGroup";
 import ReplicationSubscriptionComponent from "components/replicationSubscription";
 import { DisconnectFunction, Ref } from "../util";
 import { DeepReadonly } from "@driftshark/table";
+import requireTS from "requireTS";
 
 const HttpService = game.GetService("HttpService");
 const RunService = game.GetService("RunService");
@@ -314,7 +315,7 @@ export class World {
 				let system: System;
 				if (typeIs(v, "Instance")) {
 					system = (
-						require(v as ModuleScript) as ReturnType<
+						requireTS(v as ModuleScript) as ReturnType<
 							typeof import("../createSystem").default
 						>
 					)();

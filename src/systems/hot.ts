@@ -1,4 +1,5 @@
 import createSystem from "createSystem";
+import requireTS from "requireTS";
 import { UpdateSystem } from "System";
 
 export = createSystem(() => {
@@ -39,7 +40,7 @@ export = createSystem(() => {
 									world.registerSystems(
 										[
 											(
-												require(trackedSystemInstance.Clone()) as ReturnType<
+												requireTS(trackedSystemInstance.Clone()) as ReturnType<
 													typeof import("../createSystem").default
 												>
 											)(),
