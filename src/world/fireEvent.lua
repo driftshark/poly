@@ -1,5 +1,5 @@
 local TS = _G[script]
-local symbol = TS.import(script, TS.getModule(script, "@driftshark", "symbol").out)
+local symbol = TS.import(script, TS.getModule(script, "@driftshark", "symbol").out.symbol)
 local BASE_SYMBOL = symbol.named("base")
 
 return function(self, ref, componentName, eventName, ...)
