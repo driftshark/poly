@@ -1,3 +1,6 @@
-declare function requireTS(instance: ModuleScript): unknown;
+declare function requireTS(
+	caller: LuaSourceContainer,
+	instance: ModuleScript
+): unknown;
 
 export = requireTS;

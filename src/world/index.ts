@@ -315,7 +315,7 @@ export class World {
 				let system: System;
 				if (typeIs(v, "Instance")) {
 					system = (
-						requireTS(v as ModuleScript) as ReturnType<
+						requireTS(script, v as ModuleScript) as ReturnType<
 							typeof import("../createSystem").default
 						>
 					)();

@@ -1,6 +1,4 @@
-local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-
-return function(instance)
-	_G[instance] = TS
+return function(caller, instance)
+	_G[instance] = _G[caller]
 	return require(instance)
 end

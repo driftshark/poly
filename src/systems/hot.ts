@@ -40,7 +40,10 @@ export = createSystem(() => {
 									world.registerSystems(
 										[
 											(
-												requireTS(trackedSystemInstance.Clone()) as ReturnType<
+												requireTS(
+													script,
+													trackedSystemInstance.Clone()
+												) as ReturnType<
 													typeof import("../createSystem").default
 												>
 											)(),
