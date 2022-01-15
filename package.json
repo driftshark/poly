@@ -36,7 +36,7 @@
 	"dependencies": {
 		"@driftshark/promise-child": "^1.0.6",
 		"@driftshark/symbol": "^1.0.5",
-		"@driftshark/table": "^1.0.9",
+		"@driftshark/table": "^1.0.10",
 		"@rbxts/t": "^2.1.5"
 	}
 }
