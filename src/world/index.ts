@@ -4,9 +4,6 @@ import { named } from "@driftshark/symbol";
 import { System, UpdateSystem } from "System";
 import addToConnections from "world/addToConnections";
 import fireEvent from "./fireEvent";
-import OldComponent from "components/old";
-import ReplicationGroupComponent from "components/replicationGroup";
-import ReplicationSubscriptionComponent from "components/replicationSubscription";
 import { DisconnectFunction, Ref } from "../util";
 import { DeepReadonly } from "@driftshark/table";
 import requireTS from "requireTS";
@@ -89,9 +86,11 @@ export class World {
 			]);
 		}
 
-		this.registerComponent(OldComponent);
-		this.registerComponent(ReplicationGroupComponent);
-		this.registerComponent(ReplicationSubscriptionComponent);
+		this.registerComponent(import("components/old").expect());
+		this.registerComponent(import("components/replicationGroup").expect());
+		this.registerComponent(
+			import("components/replicationSubscription").expect()
+		);
 	}
 
 	public fireEvent = fireEvent;
