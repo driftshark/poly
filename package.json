@@ -1,6 +1,6 @@
 {
 	"name": "@driftshark/poly",
-	"version": "1.2.33",
+	"version": "1.2.34",
 	"description": "",
 	"main": "out/init.lua",
 	"scripts": {
@@ -30,13 +30,13 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-roblox-ts": "^0.0.31",
 		"prettier": "^2.4.1",
-		"roblox-ts": "^1.2.9",
-		"typescript": "^4.5.4"
+		"roblox-ts": "^1.3.1",
+		"typescript": "^4.5.5"
 	},
 	"dependencies": {
-		"@driftshark/promise-child": "^1.0.6",
-		"@driftshark/symbol": "^1.0.5",
-		"@driftshark/table": "^1.0.10",
+		"@driftshark/promise-child": "^1.0.7",
+		"@driftshark/symbol": "^1.0.6",
+		"@driftshark/table": "^1.0.11",
 		"@rbxts/t": "^2.1.5"
 	}
 }
