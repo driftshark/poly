@@ -247,25 +247,25 @@ export = <TReplicatedComponents extends ReplicatedComponents>(
 		ref: Ref,
 		data: DeepReadonly<Components["ReplicationGroup"]["data"]>
 	) => {
-		for (const [componentName] of world.componentsOf(ref)) {
+		for (const [componentName, componentGroupId] of pairs(data)) {
 			//@ts-ignore
 			if (replicatedComponents[componentName] !== undefined) {
-				const componentGroupId = data[componentName];
-				if (componentGroupId !== undefined) {
-					if (groupIdToEntity[componentGroupId] === undefined) {
-						groupIdToEntity[componentGroupId] = new Map();
-					}
+				if (groupIdToEntity[componentGroupId] === undefined) {
+					groupIdToEntity[componentGroupId] = new Map();
+				}
 
-					const arr = groupIdToEntity[componentGroupId]!.get(ref) ?? [];
-					arr.push(componentName);
+				const arr = groupIdToEntity[componentGroupId]!.get(ref) ?? [];
+				arr.push(componentName);
 
-					groupIdToEntity[componentGroupId]!.set(ref, arr);
+				groupIdToEntity[componentGroupId]!.set(ref, arr);
 
-					if (groupIdToSubscribers[componentGroupId] !== undefined) {
+				if (groupIdToSubscribers[componentGroupId] !== undefined) {
+					const componentData = world.getComponent(ref, componentName);
+					if (componentData !== undefined) {
 						const replicatedData = getReplicableData(
 							//@ts-ignore
 							componentName,
-							world.getComponent(ref, componentName)!
+							componentData
 						);
 
 						if (replicatedData !== None) {
